@@ -1,0 +1,7 @@
+parameters:
+    company_reports.class: OS\CompanyReportsBundle\CompanyReports
+
+services:
+    company.reports:
+        class: %company_reports.class%
+        arguments: ["@service_container"]
