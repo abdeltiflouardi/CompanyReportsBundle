@@ -11,7 +11,7 @@ use SoapClient,
     DOMDocument,
     OS\CompanyReportsBundle\CompanyReports;
 
-class CreditSafe
+class CreditSafe implements \Serializable
 {
 
     private $urlWSDL = "https://www.creditsafe.fr/getdata/service/CSFRServices.asmx?WSDL";
@@ -124,7 +124,7 @@ class CreditSafe
 
         $domXML = new DOMDocument();
         $domXML->loadXML($this->XMLResult);
-        
+
         return $domXML;
     }
 
@@ -138,6 +138,15 @@ class CreditSafe
         $this->companyReports = $companyReports;
     }
 
+    public function serialize()
+    {
+        return serialize($this->getXMLResult());
+    }
+
+    public function unserialize($data)
+    {
+        $this->XMLResult = unserialize($data);
+    }
 }
 
 ?>
