@@ -184,6 +184,19 @@ class CompanyReports extends Company
         return new $class($this);
     }
 
+    /**
+     * execute and return results
+     */
+    public function execute($options = array())
+    {
+        $this->getWS()->execute($options);
+        
+        return $this;
+    }
+
+    /**
+     * 
+     */
     public function dispatch()
     {
         // list of declared webservices

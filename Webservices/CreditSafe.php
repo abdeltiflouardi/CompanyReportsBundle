@@ -36,18 +36,32 @@ class CreditSafe implements \Serializable
 
     public function companySearch()
     {
-        $xml = $this->getDefaultXMLSchema();
-        $this->setXMLSchema($xml);
+        $xml = $this->getSearchCompanyXMLSchema();
 
-        return $this->execute()->getXMLResult(false);
+        $this->setXMLSchema($xml)
+                ->callWS()
+                ->bindData();
     }
 
-    public function getcompanyInformation()
+    public function getCompanyInformation()
     {
-        
+        $xml = $this->getCompanyInformationXMLSchema();
+
+        $this->setXMLSchema($xml)
+                ->callWS()
+                ->bindData();
     }
 
-    public function execute()
+    public function execute($options = array())
+    {
+        if (empty($options))
+            $options[] = 'getcompanyinformation';
+
+        foreach ($options as $option)
+            $this->{$option}();
+    }
+
+    public function callWS()
     {
         $client = new SoapClient($this->getUrlWSDL());
 
@@ -71,11 +85,39 @@ class CreditSafe implements \Serializable
     public function setXMLSchema($XMLSchema)
     {
         $this->XMLSchema = $XMLSchema;
+
+        return $this;
     }
 
     public function getXMLSchema()
     {
         return $this->XMLSchema;
+    }
+
+    public function getSearchCompanyXMLSchema()
+    {
+        $xml = $this->getDefaultXMLSchema();
+
+        $domXML = new DOMDocument();
+        $domXML->loadXML($xml);
+
+        $domXML->getElementsByTagName('operation')->item(0)->appendChild($domXML->createTextNode('companysearch'));
+        $domXML->getElementsByTagName('package')->item(0)->appendChild($domXML->createTextNode('standard'));
+
+        return $domXML->saveXML();
+    }
+
+    public function getCompanyInformationXMLSchema()
+    {
+        $xml = $this->getDefaultXMLSchema();
+
+        $domXML = new DOMDocument();
+        $domXML->loadXML($xml);
+
+        $domXML->getElementsByTagName('operation')->item(0)->appendChild($domXML->createTextNode('getcompanyinformation'));
+        $domXML->getElementsByTagName('package')->item(0)->appendChild($domXML->createTextNode('standard'));
+
+        return $domXML->saveXML();
     }
 
     public function getDefaultXMLSchema()
@@ -87,7 +129,7 @@ class CreditSafe implements \Serializable
 
         $elemUsername = $domXML->createElement('username', $this->getCompanyReports()->getLogin());
         $elemPassword = $domXML->createElement('password', $this->getCompanyReports()->getPassword());
-        $elemOperation = $domXML->createElement('operation', 'companysearch');
+        $elemOperation = $domXML->createElement('operation', '');
         $elemLanguage = $domXML->createElement('language', 'FR');
         $elemCountry = $domXML->createElement('country', 'FR');
         $elemChargereference = $domXML->createElement('chargereference');
@@ -101,7 +143,7 @@ class CreditSafe implements \Serializable
 
         $elemBody = $domXML->createElement('body');
 
-        $elemPackage = $domXML->createElement('package', 'standard');
+        $elemPackage = $domXML->createElement('package', '');
         $elemCompanyname = $domXML->createElement('companynumber', $this->getCompanyReports()->getSiren());
         $elemStartPosition = $domXML->createElement('startposition', '1');
         $elemPageSize = $domXML->createElement('pagesize', '25');
@@ -128,6 +170,37 @@ class CreditSafe implements \Serializable
         return $domXML;
     }
 
+    public function bindData()
+    {
+        $domXML = $this->getXMLResult(false);
+
+        $mapper = array(
+            'CompanyName' => 'name',
+            'ActivityCode' => 'activitycode',
+            'ActivityDescription' => 'activitydescription',
+            'LegalStatus' => 'legalform',
+            'RcsNumber' => 'courtregistrynumber',
+            'RcsDescription' => 'courtregistrydescription',
+            'Phone' => 'telephone',
+            'Fax' => 'fax',
+            'ShareCapital' => 'sharecapital',
+            'Name' => 'name',
+            'AdditionToName' => 'additiontoname',
+            'Address' => 'address',
+            'additionToAddress' => 'additiontoaddress',
+            'SpecialDistribution' => 'specialdistribution',
+            'DistributionLine' => 'distributionline',
+            'RegistrationDate' => 'incorporationdate',
+            'Nationality' => 'nationality',
+            'Status' => 'status'
+        );
+
+        foreach ($mapper as $method => $attr)
+            $this->companyReports->{'set' . $method}($domXML->getElementsByTagName($attr)->item(0)->nodeValue);
+
+        return $this;
+    }
+
     public function getCompanyReports()
     {
         return $this->companyReports;
@@ -147,6 +220,7 @@ class CreditSafe implements \Serializable
     {
         $this->XMLResult = unserialize($data);
     }
+
 }
 
 ?>
