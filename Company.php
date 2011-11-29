@@ -63,7 +63,7 @@ class Company
      * @var type 
      */
     private $fax;
-    
+
     /**
      * share capital
      * @var string $shareCapital
@@ -117,52 +117,70 @@ class Company
 
     /**
      *
-     * @var type 
+     * @var type $name
      */
     private $name;
 
     /**
      *
-     * @var type 
+     * @var type $additionToName
      */
     private $additionToName;
 
     /**
      *
-     * @var type 
+     * @var type $address
      */
     private $address;
 
     /**
      *
-     * @var type 
+     * @var type $additionToAddress
      */
     private $additionToAddress;
 
     /**
      *
-     * @var type 
+     * @var type $specialDistribution
      */
     private $specialDistribution;
 
     /**
      *
-     * @var type 
+     * @var type $distributionLine
      */
     private $distributionLine;
 
     /**
      *
-     * @var type 
+     * @var type $nationality
      */
     private $nationality;
 
     /**
      *
-     * @var type 
+     * @var type $status
      */
     private $status;
-    
+
+    /**
+     *
+     * @var type $rating
+     */
+    private $rating;
+
+    /**
+     *
+     * @var type $creditLimit
+     */
+    private $creditLimit;
+
+    /**
+     *
+     * @var type $tradingToDate
+     */
+    private $tradingToDate = array();
+
     /**
      *
      * @return string $compnayName
@@ -412,7 +430,7 @@ class Company
     {
         $this->fax = $fax;
     }
-    
+
     /**
      *
      * @return string $shareCapital
@@ -582,13 +600,67 @@ class Company
 
     /**
      *
+     * @return type 
+     */
+    public function getRating()
+    {
+        return $this->rating;
+    }
+
+    /**
+     *
+     * @param type $rating 
+     */
+    public function setRating($rating)
+    {
+        $this->rating = $rating;
+    }
+
+    /**
+     *
+     * @return type 
+     */
+    public function getCreditLimit()
+    {
+        return $this->creditLimit;
+    }
+
+    /**
+     *
+     * @param type $creditLimit 
+     */
+    public function setCreditLimit($creditLimit)
+    {
+        $this->creditLimit = $creditLimit;
+    }
+
+    /**
+     *
      * @param type $status 
      */
     public function setStatus($status)
     {
         $this->status = $status;
     }
-    
+
+    /**
+     *
+     * @return type 
+     */
+    public function getTradingToDate()
+    {
+        return $this->tradingToDate;
+    }
+
+    /**
+     *
+     * @param type $tradingToDate 
+     */
+    public function setTradingToDate($tradingToDate)
+    {
+        $this->tradingToDate = $tradingToDate;
+    }
+
     /**
      * Convert tva number to siren
      */

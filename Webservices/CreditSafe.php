@@ -192,11 +192,26 @@ class CreditSafe implements \Serializable
             'DistributionLine' => 'distributionline',
             'RegistrationDate' => 'incorporationdate',
             'Nationality' => 'nationality',
-            'Status' => 'status'
+            'Status' => 'status',
+            'Rating' => 'rating',
+            'CreditLimit' => 'creditlimit',
         );
 
         foreach ($mapper as $method => $attr)
             $this->companyReports->{'set' . $method}($domXML->getElementsByTagName($attr)->item(0)->nodeValue);
+
+        $i = 0;
+        $tarding = array();
+        foreach ($domXML->getElementsByTagName('tradingtodate') as $parent) {
+            foreach ($parent->childNodes as $child) {
+                if ($child->nodeName{0} == '#')
+                    continue;
+
+                $tarding[$i][$child->nodeName] = $child->nodeValue;
+            }
+            $i++;
+        }
+        $this->companyReports->setTradingToDate($tarding);
 
         return $this;
     }
