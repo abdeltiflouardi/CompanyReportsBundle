@@ -175,10 +175,13 @@ class CreditSafe implements \Serializable
         $domXML = $this->getXMLResult(false);
 
         $mapper = array(
+            'ReportId' => 'reportid',
+            'ReportName' => 'reportname',
             'CompanyName' => 'name',
             'ActivityCode' => 'activitycode',
             'ActivityDescription' => 'activitydescription',
             'LegalStatus' => 'legalform',
+            'RegistrationCourt' => 'registrationcourt',
             'RcsNumber' => 'courtregistrynumber',
             'RcsDescription' => 'courtregistrydescription',
             'Phone' => 'telephone',
@@ -190,16 +193,23 @@ class CreditSafe implements \Serializable
             'additionToAddress' => 'additiontoaddress',
             'SpecialDistribution' => 'specialdistribution',
             'DistributionLine' => 'distributionline',
+            'TradingAddress' => 'tradingaddress',
             'RegistrationDate' => 'incorporationdate',
+            'ProfessionalText' => 'professionaltext',
+            'CreationDate' => 'formationdate',
+            'DeregistrationDate' => 'deregistrationdate',
+            'LastAccountDate' => 'lastaccountdate',
             'Nationality' => 'nationality',
             'Status' => 'status',
             'Rating' => 'rating',
             'CreditLimit' => 'creditlimit',
+            'VatNumber' => 'vatnumber',
         );
 
         foreach ($mapper as $method => $attr)
             $this->companyReports->{'set' . $method}($domXML->getElementsByTagName($attr)->item(0)->nodeValue);
 
+        // Return trading to date of the last 3 months
         $i = 0;
         $tarding = array();
         foreach ($domXML->getElementsByTagName('tradingtodate') as $parent) {
@@ -212,6 +222,9 @@ class CreditSafe implements \Serializable
             $i++;
         }
         $this->companyReports->setTradingToDate($tarding);
+
+        // courtregistrynumber
+        $this->companyReports->setRcNumber($domXML->getElementsByTagName('courtregistrynumber')->item(1)->nodeValue);
 
         return $this;
     }

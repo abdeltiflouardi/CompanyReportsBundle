@@ -11,6 +11,20 @@ class Company
 {
 
     /**
+     * reportId
+     * 
+     * @var string $reportId;
+     */
+    private $reportId;
+
+    /**
+     * reportName
+     * 
+     * @var string $reportName;
+     */
+    private $reportName;
+
+    /**
      * CompanyName
      * 
      * @var string $companyName;
@@ -39,18 +53,35 @@ class Company
     private $legalStatus;
 
     /**
+     * @var string $registrationCourt
+     */
+    private $registrationCourt;
+
+    /**
      * court registry number
      * 
      * @var type 
      */
-    private $RcsNumber;
+    private $rcsNumber;
 
     /**
      * court registry description
      * 
-     * @var string $RcsDescription
+     * @var string $rcsDescription
      */
-    private $RcsDescription;
+    private $rcsDescription;
+
+    /**
+     *
+     * @var string $rcNumber
+     */
+    private $rcNumber;
+
+    /**
+     *
+     * @var string $vatNumber
+     */
+    private $vatNumber;
 
     /**
      *
@@ -117,6 +148,29 @@ class Company
 
     /**
      *
+     * @var string $creationDate
+     */
+    private $creationDate;
+
+    /**
+     * @var string $deregistrationDate
+     */
+    private $deregistrationDate;
+
+    /**
+     *
+     * @var string $lastAccountDate
+     */
+    private $lastAccountDate;
+
+    /**
+     *
+     * @var string $professionalText
+     */
+    private $professionalText;
+
+    /**
+     *
      * @var type $name
      */
     private $name;
@@ -152,6 +206,11 @@ class Company
     private $distributionLine;
 
     /**
+     * @var array tradingAddress
+     */
+    private $tradingAddress = array();
+
+    /**
      *
      * @var type $nationality
      */
@@ -180,6 +239,42 @@ class Company
      * @var type $tradingToDate
      */
     private $tradingToDate = array();
+
+    /**
+     *
+     * @return string 
+     */
+    public function getReportId()
+    {
+        return $this->reportId;
+    }
+
+    /**
+     *
+     * @param string $reportId 
+     */
+    public function setReportId($reportId)
+    {
+        $this->reportId = $reportId;
+    }
+
+    /**
+     *
+     * @return string 
+     */
+    public function getReportName()
+    {
+        return $this->reportName;
+    }
+
+    /**
+     *
+     * @param string $reportName 
+     */
+    public function setReportName($reportName)
+    {
+        $this->reportName = $reportName;
+    }
 
     /**
      *
@@ -317,6 +412,24 @@ class Company
 
     /**
      *
+     * @return string $tradingAddress
+     */
+    public function getTradingAddress()
+    {
+        return $this->tradingAddress;
+    }
+
+    /**
+     *
+     * @param string $tradingAddress 
+     */
+    public function setTradingAddress($tradingAddress)
+    {
+        $this->tradingAddress = $tradingAddress;
+    }
+
+    /**
+     *
      * @param string $activityCode 
      */
     public function setActivityCode($activityCode)
@@ -364,18 +477,36 @@ class Company
      *
      * @return string 
      */
+    public function getRegistrationCourt()
+    {
+        return $this->registrationCourt;
+    }
+
+    /**
+     *
+     * @param string $registrationCourt 
+     */
+    public function setRegistrationCourt($registrationCourt)
+    {
+        $this->registrationCourt = $registrationCourt;
+    }
+
+    /**
+     *
+     * @return string 
+     */
     public function getRcsNumber()
     {
-        return $this->RcsNumber;
+        return $this->rcsNumber;
     }
 
     /**
      *
      * @param string $RcsNumber 
      */
-    public function setRcsNumber($RcsNumber)
+    public function setRcsNumber($rcsNumber)
     {
-        $this->RcsNumber = $RcsNumber;
+        $this->rcsNumber = $rcsNumber;
     }
 
     /**
@@ -384,16 +515,52 @@ class Company
      */
     public function getRcsDescription()
     {
-        return $this->RcsDescription;
+        return $this->rcsDescription;
     }
 
     /**
      *
-     * @param string $RcsDescription 
+     * @param string $rcsDescription 
      */
-    public function setRcsDescription($RcsDescription)
+    public function setRcsDescription($rcsDescription)
     {
-        $this->RcsDescription = $RcsDescription;
+        $this->rcsDescription = $rcsDescription;
+    }
+
+    /**
+     *
+     * @return string 
+     */
+    public function getRcNumber()
+    {
+        return $this->rcNumber;
+    }
+
+    /**
+     *
+     * @param string $rcNumber 
+     */
+    public function setRcNumber($rcNumber)
+    {
+        $this->rcNumber = $rcNumber;
+    }
+
+    /**
+     *
+     * @return string $vatNumber
+     */
+    public function getVatNumber()
+    {
+        return $this->vatNumber;
+    }
+
+    /**
+     *
+     * @param string $vatNumber 
+     */
+    public function setVatNumber($vatNumber)
+    {
+        $this->vatNumber = $vatNumber;
     }
 
     /**
@@ -569,6 +736,78 @@ class Company
     public function setRegistrationDate($registrationDate)
     {
         $this->registrationDate = $registrationDate;
+    }
+
+    /**
+     *
+     * @return string 
+     */
+    public function getCreationDate()
+    {
+        return $this->creationDate;
+    }
+
+    /**
+     *
+     * @param string $creationDate 
+     */
+    public function setCreationDate($creationDate)
+    {
+        $this->creationDate = $creationDate;
+    }
+
+    /**
+     *
+     * @return string $deregistrationDate
+     */
+    public function getDeregistrationDate()
+    {
+        return $this->deregistrationDate;
+    }
+
+    /**
+     *
+     * @param string $deregistrationDate 
+     */
+    public function setDeregistrationDate($deregistrationDate)
+    {
+        $this->deregistrationDate = $deregistrationDate;
+    }
+
+    /**
+     *
+     * @return string 
+     */
+    public function getLastAccountDate()
+    {
+        return $this->lastAccountDate;
+    }
+
+    /**
+     *
+     * @param string $lastAccountDate 
+     */
+    public function setLastAccountDate($lastAccountDate)
+    {
+        $this->lastAccountDate = $lastAccountDate;
+    }
+
+    /**
+     *
+     * @return string $professionalText
+     */
+    public function getProfessionalText()
+    {
+        return $this->professionalText;
+    }
+
+    /**
+     *
+     * @param string $professionalText 
+     */
+    public function setProfessionalText($professionalText)
+    {
+        $this->professionalText = $professionalText;
     }
 
     /**
