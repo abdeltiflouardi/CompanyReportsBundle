@@ -302,6 +302,72 @@ class Company
 
     /**
      *
+     * @var string $departmentDescription
+     */
+    private $departmentDescription;
+
+    /**
+     *
+     * @var string $department
+     */
+    private $department;
+
+    /**
+     *
+     * @var string $region
+     */
+    private $region;
+
+    /**
+     *
+     * @var string district
+     */
+    private $district;
+
+    /**
+     *
+     * @var string $area
+     */
+    private $area;
+
+    /**
+     *
+     * @var string $municipality
+     */
+    private $municipality;
+
+    /**
+     *
+     * @var string $sizeOfUrbanArea
+     */
+    private $sizeOfUrbanArea;
+
+    /**
+     *
+     * @var array $branches
+     */
+    private $branches;
+
+    /**
+     *
+     * @var int $numberOfBranches
+     */
+    private $numberOfBranches;
+
+    /**
+     *
+     * @var type 
+     */
+    private $regionality;
+
+    /**
+     *
+     * @var type 
+     */
+    private $monoActivityStatus;
+
+    /**
+     *
      * @return string 
      */
     public function getReportId()
@@ -959,7 +1025,7 @@ class Company
     {
         $this->productionRole = $productionRole;
     }
-    
+
     /**
      *
      * @return type 
@@ -1138,6 +1204,204 @@ class Company
     public function setTradingToDate($tradingToDate)
     {
         $this->tradingToDate = $tradingToDate;
+    }
+
+    /**
+     *
+     * @return type 
+     */
+    public function getDepartmentDescription()
+    {
+        return $this->departmentDescription;
+    }
+
+    /**
+     *
+     * @param type $departmentDescription 
+     */
+    public function setDepartmentDescription($departmentDescription)
+    {
+        $this->departmentDescription = $departmentDescription;
+    }
+
+    /**
+     *
+     * @return type 
+     */
+    public function getDepartment()
+    {
+        return $this->department;
+    }
+
+    /**
+     *
+     * @param type $department 
+     */
+    public function setDepartment($department)
+    {
+        $this->department = $department;
+    }
+
+    /**
+     *
+     * @return type 
+     */
+    public function getRegion()
+    {
+        return $this->region;
+    }
+
+    /**
+     *
+     * @param type $region 
+     */
+    public function setRegion($region)
+    {
+        $this->region = $region;
+    }
+
+    /**
+     *
+     * @return type 
+     */
+    public function getDistrict()
+    {
+        return $this->district;
+    }
+
+    /**
+     *
+     * @param type $district 
+     */
+    public function setDistrict($district)
+    {
+        $this->district = $district;
+    }
+
+    /**
+     *
+     * @return type 
+     */
+    public function getArea()
+    {
+        return $this->area;
+    }
+
+    /**
+     *
+     * @param type $area 
+     */
+    public function setArea($area)
+    {
+        $this->area = $area;
+    }
+
+    /**
+     *
+     * @return type 
+     */
+    public function getMunicipality()
+    {
+        return $this->municipality;
+    }
+
+    /**
+     *
+     * @param type $municipality 
+     */
+    public function setMunicipality($municipality)
+    {
+        $this->municipality = $municipality;
+    }
+
+    /**
+     *
+     * @return type 
+     */
+    public function getSizeOfUrbanArea()
+    {
+        return $this->sizeOfUrbanArea;
+    }
+
+    /**
+     *
+     * @param type $sizeOfUrbanArea 
+     */
+    public function setSizeOfUrbanArea($sizeOfUrbanArea)
+    {
+        $this->sizeOfUrbanArea = $sizeOfUrbanArea;
+    }
+
+    /**
+     *
+     * @return type 
+     */
+    public function getBranches()
+    {
+        return $this->branches;
+    }
+
+    /**
+     *
+     * @param type $branches 
+     */
+    public function setBranches($branches)
+    {
+        $this->branches = $branches;
+    }
+
+    /**
+     *
+     * @return string 
+     */
+    public function getNumberOfBranches()
+    {
+        return $this->numberOfBranches;
+    }
+
+    /**
+     *
+     * @param string $numberOfBranches 
+     */
+    public function setNumberOfBranches($numberOfBranches)
+    {
+        $this->numberOfBranches = $numberOfBranches;
+    }
+
+    /**
+     *
+     * @return type 
+     */
+    public function getRegionality()
+    {
+        return $this->regionality;
+    }
+
+    /**
+     *
+     * @param type $regionality 
+     */
+    public function setRegionality($regionality)
+    {
+        $this->regionality = $regionality;
+    }
+
+    /**
+     *
+     * @return type 
+     */
+    public function getMonoActivityStatus()
+    {
+        return $this->monoActivityStatus;
+    }
+
+    /**
+     *
+     * @param type $monoActivityStatus 
+     */
+    public function setMonoActivityStatus($monoActivityStatus)
+    {
+        $this->monoActivityStatus = $monoActivityStatus;
     }
 
     /**

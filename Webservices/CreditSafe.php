@@ -214,6 +214,16 @@ class CreditSafe implements \Serializable
             'ActivityLocation' => 'activitylocation',
             'LocationSurface' => 'locationsurface',
             'Seasonality' => 'seasonality',
+            'DepartmentDescription' => 'departmentdescription',
+            'Department' => 'department',
+            'Region' => 'region',
+            'District' => 'district',
+            'Area' => 'area',
+            'Municipality' => 'municipality',
+            'SizeOfUrbanArea' => 'sizeofurbanarea',
+            'NumberOfBranches' => 'numberofbranches',
+            'MonoActivityStatus' => 'monoactivitystatus',
+            'Regionality' => 'regionality',
         );
 
         foreach ($mapper as $method => $attr)
@@ -235,6 +245,20 @@ class CreditSafe implements \Serializable
 
         // courtregistrynumber
         $this->companyReports->setRcNumber($domXML->getElementsByTagName('courtregistrynumber')->item(1)->nodeValue);
+
+        // Branches
+        $i = 0;
+        $branches = array();
+        foreach ($domXML->getElementsByTagName('branch') as $parent) {
+            foreach ($parent->childNodes as $child) {
+                if ($child->nodeName{0} == '#')
+                    continue;
+
+                $branches[$i][$child->nodeName] = $child->nodeValue;
+            }
+            $i++;
+        }
+        $this->companyReports->setBranches($branches);
 
         return $this;
     }
