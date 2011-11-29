@@ -96,6 +96,12 @@ class Company
     private $fax;
 
     /**
+     *
+     * @var string $type 
+     */
+    private $type;
+
+    /**
      * share capital
      * @var string $shareCapital
      */
@@ -153,6 +159,24 @@ class Company
     private $creationDate;
 
     /**
+     *
+     * @var string $reasonForFormation
+     */
+    private $reasonForFormation;
+
+    /**
+     *
+     * @var string $reasonForClosure
+     */
+    private $reasonForClosure;
+
+    /**
+     *
+     * @var string $closureDate
+     */
+    private $closureDate;
+
+    /**
      * @var string $deregistrationDate
      */
     private $deregistrationDate;
@@ -162,6 +186,42 @@ class Company
      * @var string $lastAccountDate
      */
     private $lastAccountDate;
+
+    /**
+     *
+     * @var string $reactivationDate
+     */
+    private $reactivationDate;
+
+    /**
+     *
+     * @var string $productionRole
+     */
+    private $productionRole;
+
+    /**
+     *
+     * @var type $nature
+     */
+    private $nature;
+
+    /**
+     *
+     * @var string $activityLocation
+     */
+    private $activityLocation;
+
+    /**
+     *
+     * @var string $locationSurface
+     */
+    private $locationSurface;
+
+    /**
+     *
+     * @var string $seasonality
+     */
+    private $seasonality;
 
     /**
      *
@@ -620,6 +680,24 @@ class Company
      *
      * @return string
      */
+    public function getType()
+    {
+        return $this->type;
+    }
+
+    /**
+     *
+     * @param string $type 
+     */
+    public function setType($type)
+    {
+        $this->type = $type;
+    }
+
+    /**
+     *
+     * @return string
+     */
     public function getTva()
     {
         return $this->tva;
@@ -758,6 +836,60 @@ class Company
 
     /**
      *
+     * @return string $reasonForFormation
+     */
+    public function getReasonForFormation()
+    {
+        return $this->reasonForFormation;
+    }
+
+    /**
+     *
+     * @param string $reasonForFormation 
+     */
+    public function setReasonForFormation($reasonForFormation)
+    {
+        $this->reasonForFormation = $reasonForFormation;
+    }
+
+    /**
+     *
+     * @return type 
+     */
+    public function getReasonForClosure()
+    {
+        return $this->reasonForClosure;
+    }
+
+    /**
+     *
+     * @param type $reasonForClosure 
+     */
+    public function setReasonForClosure($reasonForClosure)
+    {
+        $this->reasonForClosure = $reasonForClosure;
+    }
+
+    /**
+     *
+     * @return type 
+     */
+    public function getClosureDate()
+    {
+        return $this->closureDate;
+    }
+
+    /**
+     *
+     * @param type $closureDate 
+     */
+    public function setClosureDate($closureDate)
+    {
+        $this->closureDate = $closureDate;
+    }
+
+    /**
+     *
      * @return string $deregistrationDate
      */
     public function getDeregistrationDate()
@@ -790,6 +922,114 @@ class Company
     public function setLastAccountDate($lastAccountDate)
     {
         $this->lastAccountDate = $lastAccountDate;
+    }
+
+    /**
+     *
+     * @return string $reactivationDate
+     */
+    public function getReactivationDate()
+    {
+        return $this->reactivationDate;
+    }
+
+    /**
+     *
+     * @param string $reactivationDate 
+     */
+    public function setReactivationDate($reactivationDate)
+    {
+        $this->reactivationDate = $reactivationDate;
+    }
+
+    /**
+     *
+     * @return string $productionRole
+     */
+    public function getProductionRole()
+    {
+        return $this->productionRole;
+    }
+
+    /**
+     *
+     * @param string $productionRole 
+     */
+    public function setProductionRole($productionRole)
+    {
+        $this->productionRole = $productionRole;
+    }
+    
+    /**
+     *
+     * @return type 
+     */
+    public function getNature()
+    {
+        return $this->nature;
+    }
+
+    /**
+     *
+     * @param type $nature 
+     */
+    public function setNature($nature)
+    {
+        $this->nature = $nature;
+    }
+
+    /**
+     *
+     * @return type 
+     */
+    public function getActivityLocation()
+    {
+        return $this->activityLocation;
+    }
+
+    /**
+     *
+     * @param type $activityLocation 
+     */
+    public function setActivityLocation($activityLocation)
+    {
+        $this->activityLocation = $activityLocation;
+    }
+
+    /**
+     *
+     * @return type 
+     */
+    public function getLocationSurface()
+    {
+        return $this->locationSurface;
+    }
+
+    /**
+     *
+     * @param type $locationSurface 
+     */
+    public function setLocationSurface($locationSurface)
+    {
+        $this->locationSurface = $locationSurface;
+    }
+
+    /**
+     *
+     * @return type 
+     */
+    public function getSeasonality()
+    {
+        return $this->seasonality;
+    }
+
+    /**
+     *
+     * @param type $seasonality 
+     */
+    public function setSeasonality($seasonality)
+    {
+        $this->seasonality = $seasonality;
     }
 
     /**

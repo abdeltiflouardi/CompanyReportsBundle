@@ -197,13 +197,23 @@ class CreditSafe implements \Serializable
             'RegistrationDate' => 'incorporationdate',
             'ProfessionalText' => 'professionaltext',
             'CreationDate' => 'formationdate',
+            'ReasonForFormation' => 'reasonforformation',
+            'ClosureDate' => 'closuredate',
+            'ReasonForClosure' => 'reasonforclosure',
             'DeregistrationDate' => 'deregistrationdate',
             'LastAccountDate' => 'lastaccountdate',
+            'ReactivationDate' => 'reactivationdate',
+            'ProductionRole' => 'productionrole',
             'Nationality' => 'nationality',
             'Status' => 'status',
             'Rating' => 'rating',
             'CreditLimit' => 'creditlimit',
             'VatNumber' => 'vatnumber',
+            'Type' => 'type',
+            'Nature' => 'nature',
+            'ActivityLocation' => 'activitylocation',
+            'LocationSurface' => 'locationsurface',
+            'Seasonality' => 'seasonality',
         );
 
         foreach ($mapper as $method => $attr)
