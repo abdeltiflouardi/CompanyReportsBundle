@@ -374,6 +374,12 @@ class Company
 
     /**
      *
+     * @var array $previousRatings
+     */
+    private $previousRatings;
+
+    /**
+     *
      * @return string 
      */
     public function getReportId()
@@ -1428,6 +1434,24 @@ class Company
         $this->balanceSheets = $balanceSheets;
     }
 
+    /**
+     *
+     * @return type 
+     */
+    public function getPreviousRatings()
+    {
+        return $this->previousRatings;
+    }
+
+    /**
+     *
+     * @param type $previousRatings 
+     */
+    public function setPreviousRatings($previousRatings)
+    {
+        $this->previousRatings = $previousRatings;
+    }    
+    
     /**
      * Convert tva number to siren
      */

@@ -274,9 +274,14 @@ class CreditSafe implements \Serializable
         foreach ($sx->body->company->balancesynthesis->balancesheet as $balancesheet) {
             $balanceSheets[] = $this->nodeToArray($balancesheet);
         }
-
         $this->companyReports->setBalanceSheets($balanceSheets);
 
+        $previousRatings = array();
+        foreach ($sx->body->company->ratings->previousratings->previousrating as $previousrating) {
+            $previousRatings[] = $this->nodeToArray($previousrating);
+        }
+        $this->companyReports->setPreviousRatings($previousRatings);
+        
         return $this;
     }
 
