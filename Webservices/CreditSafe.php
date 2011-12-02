@@ -373,6 +373,13 @@ class CreditSafe implements \Serializable
         }
         $this->companyReports->setJudgements($judgements);
 
+        // Directors
+        $leaderships = array();
+        foreach ($sx->body->company->directors->director as $director) {
+            $leaderships[] = $this->nodeToArray($director);
+        }
+        $this->companyReports->setLeaderships($leaderships);        
+        
         return $this;
     }
 

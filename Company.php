@@ -386,6 +386,12 @@ class Company
 
     /**
      *
+     * @var array $leaderships
+     */
+    private $leaderships;
+    
+    /**
+     *
      * @return string 
      */
     public function getReportId()
@@ -1476,6 +1482,24 @@ class Company
         $this->judgements = $judgements;
     }
 
+    /**
+     *
+     * @return array $leaderships
+     */
+    public function getLeaderships()
+    {
+        return $this->leaderships;
+    }
+
+    /**
+     *
+     * @param array $leaderships 
+     */
+    public function setLeaderships($leaderships)
+    {
+        $this->leaderships = $leaderships;
+    }    
+    
     /**
      * Convert tva number to siren
      */
