@@ -380,6 +380,12 @@ class Company
 
     /**
      *
+     * @var array $judgement
+     */
+    private $judgements;
+
+    /**
+     *
      * @return string 
      */
     public function getReportId()
@@ -1450,8 +1456,26 @@ class Company
     public function setPreviousRatings($previousRatings)
     {
         $this->previousRatings = $previousRatings;
-    }    
-    
+    }
+
+    /**
+     *
+     * @return type 
+     */
+    public function getJudgements()
+    {
+        return $this->judgements;
+    }
+
+    /**
+     *
+     * @param type $judgements 
+     */
+    public function setJudgements($judgements)
+    {
+        $this->judgements = $judgements;
+    }
+
     /**
      * Convert tva number to siren
      */

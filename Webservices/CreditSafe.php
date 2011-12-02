@@ -15,26 +15,61 @@ use SoapClient,
 class CreditSafe implements \Serializable
 {
 
+    /**
+     * URL of webservice
+     * 
+     * @var string $urlWSDL
+     */
     private $urlWSDL = "https://www.creditsafe.fr/getdata/service/CSFRServices.asmx?WSDL";
+    /**
+     * Result of current search result (xmlresponse)
+     * - Text format: xml
+     * 
+     * @var string $XMLResult
+     */
     private $XMLResult;
+    /**
+     * Schema of current search (xmlrequest)
+     * - Text format: xml
+     * 
+     * @var string $XMLSchema
+     */
     private $XMLSchema;
+    /**
+     * Entity company reports
+     * 
+     * @var CompanyReports $companyReports
+     */
     private $companyReports;
 
+    /**
+     * Constructor
+     * @param CompanyReports $companyReports 
+     */
     public function __construct(CompanyReports $companyReports)
     {
         $this->companyReports = $companyReports;
     }
 
+    /**
+     * 
+     */
     public function getDirectorInformation()
     {
         
     }
 
+    /**
+     * 
+     */
     public function directorSearch()
     {
         
     }
 
+    /**
+     * 
+     */
     public function companySearch()
     {
         $xml = $this->getSearchCompanyXMLSchema();
@@ -43,6 +78,9 @@ class CreditSafe implements \Serializable
                 ->callWS();
     }
 
+    /**
+     * 
+     */
     public function getCompanyInformation()
     {
         $xml = $this->getCompanyInformationXMLSchema();
@@ -51,6 +89,10 @@ class CreditSafe implements \Serializable
                 ->callWS();
     }
 
+    /**
+     *
+     * @param array $options 
+     */
     public function execute($options = array())
     {
         if ($this->isCachedCompanyInfos()) {
@@ -64,10 +106,13 @@ class CreditSafe implements \Serializable
 
             $this->cacheCompanyInfos();
         }
-        
+
         $this->bindData();
     }
 
+    /**
+     * 
+     */
     public function callWS()
     {
         $client = new SoapClient($this->getUrlWSDL());
@@ -79,16 +124,29 @@ class CreditSafe implements \Serializable
         return $this;
     }
 
+    /**
+     *
+     * @return type 
+     */
     public function getUrlWSDL()
     {
         return $this->urlWSDL;
     }
 
+    /**
+     *
+     * @return type 
+     */
     public function getData()
     {
         return array('requestXmlStr' => $this->getXMLSchema());
     }
 
+    /**
+     *
+     * @param type $XMLSchema
+     * @return \OS\CompanyReportsBundle\Webservices\CreditSafe 
+     */
     public function setXMLSchema($XMLSchema)
     {
         $this->XMLSchema = $XMLSchema;
@@ -96,11 +154,18 @@ class CreditSafe implements \Serializable
         return $this;
     }
 
+    /**
+     *
+     * @return type 
+     */
     public function getXMLSchema()
     {
         return $this->XMLSchema;
     }
 
+    /**
+     * 
+     */
     public function getSearchCompanyXMLSchema()
     {
         $xml = $this->getDefaultXMLSchema();
@@ -114,6 +179,10 @@ class CreditSafe implements \Serializable
         return $domXML->saveXML();
     }
 
+    /**
+     *
+     * @return type 
+     */
     public function getCompanyInformationXMLSchema()
     {
         $xml = $this->getDefaultXMLSchema();
@@ -127,6 +196,10 @@ class CreditSafe implements \Serializable
         return $domXML->saveXML();
     }
 
+    /**
+     *
+     * @return type 
+     */
     public function getDefaultXMLSchema()
     {
         $domXML         = new DOMDocument();
@@ -166,6 +239,11 @@ class CreditSafe implements \Serializable
         return $domXML->saveXML($elemXMLRequest);
     }
 
+    /**
+     *
+     * @param type $returnString
+     * @return \DOMDocument 
+     */
     public function getXMLResult($returnString = true)
     {
         if ($returnString)
@@ -177,6 +255,10 @@ class CreditSafe implements \Serializable
         return $domXML;
     }
 
+    /**
+     *
+     * @return \OS\CompanyReportsBundle\Webservices\CreditSafe 
+     */
     public function bindData()
     {
         $domXML = $this->getXMLResult(false);
@@ -271,55 +353,94 @@ class CreditSafe implements \Serializable
         $balanceSheets = array();
         $sx = new SimpleXMLElement($domXML->saveXML());
 
+        // Balancesheet
         foreach ($sx->body->company->balancesynthesis->balancesheet as $balancesheet) {
             $balanceSheets[] = $this->nodeToArray($balancesheet);
         }
         $this->companyReports->setBalanceSheets($balanceSheets);
 
+        // Previous rating
         $previousRatings = array();
         foreach ($sx->body->company->ratings->previousratings->previousrating as $previousrating) {
             $previousRatings[] = $this->nodeToArray($previousrating);
         }
         $this->companyReports->setPreviousRatings($previousRatings);
-        
+
+        // Judgement
+        $judgements = array();
+        foreach ($sx->body->company->judgements->judgement as $judgement) {
+            $judgements[] = $this->nodeToArray($judgement);
+        }
+        $this->companyReports->setJudgements($judgements);
+
         return $this;
     }
 
+    /**
+     *
+     * @return type 
+     */
     public function getCompanyReports()
     {
         return $this->companyReports;
     }
 
+    /**
+     *
+     * @param type $companyReports 
+     */
     public function setCompanyReports($companyReports)
     {
         $this->companyReports = $companyReports;
     }
 
+    /**
+     *
+     * @return type 
+     */
     public function serialize()
     {
         return serialize($this->getXMLResult());
     }
 
+    /**
+     * 
+     */
     public function unserialize($data)
     {
         $this->XMLResult = unserialize($data);
     }
 
+    /**
+     * 
+     */
     public function cacheCompanyInfos()
     {
         file_put_contents($this->companyReports->getCacheFile(), $this->getXMLResult(true));
     }
 
+    /**
+     * 
+     */
     public function getCachedCompanyInfos()
     {
         $this->XMLResult = file_get_contents($this->companyReports->getCacheFile());
     }
 
+    /**
+     *
+     * @return type 
+     */
     public function isCachedCompanyInfos()
     {
         return file_exists($this->companyReports->getCacheFile());
     }
 
+    /**
+     *
+     * @param type $node
+     * @return type 
+     */
     function nodeToArray($node)
     {
         $array = array();
