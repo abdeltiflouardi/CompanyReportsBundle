@@ -9,6 +9,7 @@ namespace OS\CompanyReportsBundle\Webservices;
  */
 use SoapClient,
     DOMDocument,
+    SimpleXMLElement,
     OS\CompanyReportsBundle\CompanyReports;
 
 class CreditSafe implements \Serializable
@@ -39,8 +40,7 @@ class CreditSafe implements \Serializable
         $xml = $this->getSearchCompanyXMLSchema();
 
         $this->setXMLSchema($xml)
-                ->callWS()
-                ->bindData();
+                ->callWS();
     }
 
     public function getCompanyInformation()
@@ -48,17 +48,24 @@ class CreditSafe implements \Serializable
         $xml = $this->getCompanyInformationXMLSchema();
 
         $this->setXMLSchema($xml)
-                ->callWS()
-                ->bindData();
+                ->callWS();
     }
 
     public function execute($options = array())
     {
-        if (empty($options))
-            $options[] = 'getcompanyinformation';
+        if ($this->isCachedCompanyInfos()) {
+            $this->getCachedCompanyInfos();
+        } else {
+            if (empty($options))
+                $options[] = 'getcompanyinformation';
 
-        foreach ($options as $option)
-            $this->{$option}();
+            foreach ($options as $option)
+                $this->{$option}();
+
+            $this->cacheCompanyInfos();
+        }
+        
+        $this->bindData();
     }
 
     public function callWS()
@@ -122,16 +129,16 @@ class CreditSafe implements \Serializable
 
     public function getDefaultXMLSchema()
     {
-        $domXML = new DOMDocument();
+        $domXML         = new DOMDocument();
         $elemXMLRequest = $domXML->createElement('xmlrequest');
 
         $elemHeader = $domXML->createElement('header');
 
-        $elemUsername = $domXML->createElement('username', $this->getCompanyReports()->getLogin());
-        $elemPassword = $domXML->createElement('password', $this->getCompanyReports()->getPassword());
-        $elemOperation = $domXML->createElement('operation', '');
-        $elemLanguage = $domXML->createElement('language', 'FR');
-        $elemCountry = $domXML->createElement('country', 'FR');
+        $elemUsername        = $domXML->createElement('username', $this->getCompanyReports()->getLogin());
+        $elemPassword        = $domXML->createElement('password', $this->getCompanyReports()->getPassword());
+        $elemOperation       = $domXML->createElement('operation', '');
+        $elemLanguage        = $domXML->createElement('language', 'FR');
+        $elemCountry         = $domXML->createElement('country', 'FR');
         $elemChargereference = $domXML->createElement('chargereference');
 
         $elemHeader->appendChild($elemUsername);
@@ -143,10 +150,10 @@ class CreditSafe implements \Serializable
 
         $elemBody = $domXML->createElement('body');
 
-        $elemPackage = $domXML->createElement('package', '');
-        $elemCompanyname = $domXML->createElement('companynumber', $this->getCompanyReports()->getSiren());
+        $elemPackage       = $domXML->createElement('package', '');
+        $elemCompanyname   = $domXML->createElement('companynumber', $this->getCompanyReports()->getSiren());
         $elemStartPosition = $domXML->createElement('startposition', '1');
-        $elemPageSize = $domXML->createElement('pagesize', '25');
+        $elemPageSize      = $domXML->createElement('pagesize', '25');
 
         $elemBody->appendChild($elemPackage);
         $elemBody->appendChild($elemCompanyname);
@@ -175,62 +182,62 @@ class CreditSafe implements \Serializable
         $domXML = $this->getXMLResult(false);
 
         $mapper = array(
-            'ReportId' => 'reportid',
-            'ReportName' => 'reportname',
-            'CompanyName' => 'name',
-            'ActivityCode' => 'activitycode',
-            'ActivityDescription' => 'activitydescription',
-            'LegalStatus' => 'legalform',
-            'RegistrationCourt' => 'registrationcourt',
-            'RcsNumber' => 'courtregistrynumber',
-            'RcsDescription' => 'courtregistrydescription',
-            'Phone' => 'telephone',
-            'Fax' => 'fax',
-            'ShareCapital' => 'sharecapital',
-            'Name' => 'name',
-            'AdditionToName' => 'additiontoname',
-            'Address' => 'address',
-            'additionToAddress' => 'additiontoaddress',
-            'SpecialDistribution' => 'specialdistribution',
-            'DistributionLine' => 'distributionline',
-            'TradingAddress' => 'tradingaddress',
-            'RegistrationDate' => 'incorporationdate',
-            'ProfessionalText' => 'professionaltext',
-            'CreationDate' => 'formationdate',
-            'ReasonForFormation' => 'reasonforformation',
-            'ClosureDate' => 'closuredate',
-            'ReasonForClosure' => 'reasonforclosure',
-            'DeregistrationDate' => 'deregistrationdate',
-            'LastAccountDate' => 'lastaccountdate',
-            'ReactivationDate' => 'reactivationdate',
-            'ProductionRole' => 'productionrole',
-            'Nationality' => 'nationality',
-            'Status' => 'status',
-            'Rating' => 'rating',
-            'CreditLimit' => 'creditlimit',
-            'VatNumber' => 'vatnumber',
-            'Type' => 'type',
-            'Nature' => 'nature',
-            'ActivityLocation' => 'activitylocation',
-            'LocationSurface' => 'locationsurface',
-            'Seasonality' => 'seasonality',
+            'ReportId'              => 'reportid',
+            'ReportName'            => 'reportname',
+            'CompanyName'           => 'name',
+            'ActivityCode'          => 'activitycode',
+            'ActivityDescription'   => 'activitydescription',
+            'LegalStatus'           => 'legalform',
+            'RegistrationCourt'     => 'registrationcourt',
+            'RcsNumber'             => 'courtregistrynumber',
+            'RcsDescription'        => 'courtregistrydescription',
+            'Phone'                 => 'telephone',
+            'Fax'                   => 'fax',
+            'ShareCapital'          => 'sharecapital',
+            'Name'                  => 'name',
+            'AdditionToName'        => 'additiontoname',
+            'Address'               => 'address',
+            'additionToAddress'     => 'additiontoaddress',
+            'SpecialDistribution'   => 'specialdistribution',
+            'DistributionLine'      => 'distributionline',
+            'TradingAddress'        => 'tradingaddress',
+            'RegistrationDate'      => 'incorporationdate',
+            'ProfessionalText'      => 'professionaltext',
+            'CreationDate'          => 'formationdate',
+            'ReasonForFormation'    => 'reasonforformation',
+            'ClosureDate'           => 'closuredate',
+            'ReasonForClosure'      => 'reasonforclosure',
+            'DeregistrationDate'    => 'deregistrationdate',
+            'LastAccountDate'       => 'lastaccountdate',
+            'ReactivationDate'      => 'reactivationdate',
+            'ProductionRole'        => 'productionrole',
+            'Nationality'           => 'nationality',
+            'Status'                => 'status',
+            'Rating'                => 'rating',
+            'CreditLimit'           => 'creditlimit',
+            'VatNumber'             => 'vatnumber',
+            'Type'                  => 'type',
+            'Nature'                => 'nature',
+            'ActivityLocation'      => 'activitylocation',
+            'LocationSurface'       => 'locationsurface',
+            'Seasonality'           => 'seasonality',
             'DepartmentDescription' => 'departmentdescription',
-            'Department' => 'department',
-            'Region' => 'region',
-            'District' => 'district',
-            'Area' => 'area',
-            'Municipality' => 'municipality',
-            'SizeOfUrbanArea' => 'sizeofurbanarea',
-            'NumberOfBranches' => 'numberofbranches',
-            'MonoActivityStatus' => 'monoactivitystatus',
-            'Regionality' => 'regionality',
+            'Department'            => 'department',
+            'Region'                => 'region',
+            'District'              => 'district',
+            'Area'                  => 'area',
+            'Municipality'          => 'municipality',
+            'SizeOfUrbanArea'       => 'sizeofurbanarea',
+            'NumberOfBranches'      => 'numberofbranches',
+            'MonoActivityStatus'    => 'monoactivitystatus',
+            'Regionality'           => 'regionality',
         );
 
         foreach ($mapper as $method => $attr)
             $this->companyReports->{'set' . $method}($domXML->getElementsByTagName($attr)->item(0)->nodeValue);
 
         // Return trading to date of the last 3 months
-        $i = 0;
+        $i       = 0;
         $tarding = array();
         foreach ($domXML->getElementsByTagName('tradingtodate') as $parent) {
             foreach ($parent->childNodes as $child) {
@@ -247,7 +254,7 @@ class CreditSafe implements \Serializable
         $this->companyReports->setRcNumber($domXML->getElementsByTagName('courtregistrynumber')->item(1)->nodeValue);
 
         // Branches
-        $i = 0;
+        $i        = 0;
         $branches = array();
         foreach ($domXML->getElementsByTagName('branch') as $parent) {
             foreach ($parent->childNodes as $child) {
@@ -259,6 +266,16 @@ class CreditSafe implements \Serializable
             $i++;
         }
         $this->companyReports->setBranches($branches);
+
+        // Bilan actif/passif/results
+        $balanceSheets = array();
+        $sx = new SimpleXMLElement($domXML->saveXML());
+
+        foreach ($sx->body->company->balancesynthesis->balancesheet as $balancesheet) {
+            $balanceSheets[] = $this->nodeToArray($balancesheet);
+        }
+
+        $this->companyReports->setBalanceSheets($balanceSheets);
 
         return $this;
     }
@@ -281,6 +298,33 @@ class CreditSafe implements \Serializable
     public function unserialize($data)
     {
         $this->XMLResult = unserialize($data);
+    }
+
+    public function cacheCompanyInfos()
+    {
+        file_put_contents($this->companyReports->getCacheFile(), $this->getXMLResult(true));
+    }
+
+    public function getCachedCompanyInfos()
+    {
+        $this->XMLResult = file_get_contents($this->companyReports->getCacheFile());
+    }
+
+    public function isCachedCompanyInfos()
+    {
+        return file_exists($this->companyReports->getCacheFile());
+    }
+
+    function nodeToArray($node)
+    {
+        $array = array();
+        foreach ($node->children() as $child) {
+            if (!$child->children())
+                $array[$child->getName()] = $child;
+            else
+                $array[$child->getName()] = $this->nodeToArray($child);
+        }
+        return $array;
     }
 
 }

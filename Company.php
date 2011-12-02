@@ -356,15 +356,21 @@ class Company
 
     /**
      *
-     * @var type 
+     * @var type $regionality
      */
     private $regionality;
 
     /**
      *
-     * @var type 
+     * @var type $monoActivityStatus
      */
     private $monoActivityStatus;
+
+    /**
+     *
+     * @var array $balanceSheets
+     */
+    private $balanceSheets;
 
     /**
      *
@@ -1402,6 +1408,24 @@ class Company
     public function setMonoActivityStatus($monoActivityStatus)
     {
         $this->monoActivityStatus = $monoActivityStatus;
+    }
+
+    /**
+     *
+     * @return array 
+     */
+    public function getBalanceSheets()
+    {
+        return $this->balanceSheets;
+    }
+
+    /**
+     *
+     * @param array $balanceSheets 
+     */
+    public function setBalanceSheets($balanceSheets)
+    {
+        $this->balanceSheets = $balanceSheets;
     }
 
     /**

@@ -46,6 +46,17 @@ class CompanyReports extends Company
     private $country;
 
     /**
+     * Path of cache directory
+     * @var string
+     */
+    private $cacheDir;
+    
+    /**
+     * 
+     */
+    private $cacheFile;
+    
+    /**
      * login to login into webservice
      * 
      * @var string $login
@@ -59,10 +70,11 @@ class CompanyReports extends Company
      */
     private $password;
 
-    public function __construct($container)
+    public function __construct($container, $cacheDir = null)
     {
         $this->container = $container;
-
+        $this->cacheDir = $cacheDir;
+        
         $this->dispatch();
     }
 
@@ -175,6 +187,62 @@ class CompanyReports extends Company
     }
 
     /**
+     *
+     * @return type 
+     */
+    public function getContainer()
+    {
+        return $this->container;
+    }
+
+    /**
+     *
+     * @param type $container 
+     */
+    public function setContainer($container)
+    {
+        $this->container = $container;
+    }
+
+    /**
+     *
+     * @return type 
+     */
+    public function getCacheDir()
+    {
+        return $this->cacheDir;
+    }
+
+    /**
+     *
+     * @param type $cacheDir 
+     */
+    public function setCacheDir($cacheDir)
+    {
+        $this->cacheDir = $cacheDir;
+    }
+    
+    /**
+     *
+     * @return type 
+     */
+    public function getCacheFile()
+    {
+        if (!$this->cacheFile)
+            $this->cacheFile = $this->getCacheDir () . DIRECTORY_SEPARATOR . $this->getSiret () . '.xml';
+            
+        return $this->cacheFile;
+    }
+
+    /**
+     *
+     * @param type $cacheFile 
+     */
+    public function setCacheFile($cacheFile)
+    {
+        $this->cacheFile = $cacheFile;
+    }    
+    /**
      * return webservice
      */
     public function getWS()
@@ -190,7 +258,7 @@ class CompanyReports extends Company
     public function execute($options = array())
     {
         $this->getWS()->execute($options);
-        
+
         return $this;
     }
 
