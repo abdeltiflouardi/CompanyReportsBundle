@@ -410,6 +410,24 @@ class Company
 
     /**
      *
+     * @var array $ultimateParents
+     */
+    private $ultimateParents;
+
+    /**
+     *
+     * @var integer $numberOfCompanies
+     */
+    private $numberOfCompanies;
+
+    /**
+     *
+     * @var string $parentCompanyName
+     */
+    private $parentCompanyName;
+
+    /**
+     *
      * @return string 
      */
     public function getReportId()
@@ -424,7 +442,7 @@ class Company
     public function setReportId($reportId)
     {
         $this->reportId = $reportId;
-        
+
         return $this;
     }
 
@@ -444,7 +462,7 @@ class Company
     public function setReportName($reportName)
     {
         $this->reportName = $reportName;
-        
+
         return $this;
     }
 
@@ -463,7 +481,7 @@ class Company
     public function setCompanyName($companyName)
     {
         $this->companyName = $companyName;
-        
+
         return $this;
     }
 
@@ -492,7 +510,7 @@ class Company
     public function setName($name)
     {
         $this->name = $name;
-        
+
         return $this;
     }
 
@@ -512,7 +530,7 @@ class Company
     public function setAdditionToName($additionToName)
     {
         $this->additionToName = $additionToName;
-        
+
         return $this;
     }
 
@@ -532,7 +550,7 @@ class Company
     public function setAddress($address)
     {
         $this->address = $address;
-        
+
         return $this;
     }
 
@@ -552,7 +570,7 @@ class Company
     public function setAdditionToAddress($additionToAddress)
     {
         $this->additionToAddress = $additionToAddress;
-        
+
         return $this;
     }
 
@@ -572,7 +590,7 @@ class Company
     public function setSpecialDistribution($specialDistribution)
     {
         $this->specialDistribution = $specialDistribution;
-        
+
         return $this;
     }
 
@@ -592,7 +610,7 @@ class Company
     public function setDistributionLine($distributionLine)
     {
         $this->distributionLine = $distributionLine;
-        
+
         return $this;
     }
 
@@ -612,7 +630,7 @@ class Company
     public function setTradingAddress($tradingAddress)
     {
         $this->tradingAddress = $tradingAddress;
-        
+
         return $this;
     }
 
@@ -623,7 +641,7 @@ class Company
     public function setActivityCode($activityCode)
     {
         $this->activityCode = $activityCode;
-        
+
         return $this;
     }
 
@@ -643,7 +661,7 @@ class Company
     public function setActivityDescription($activityDescription)
     {
         $this->activityDescription = $activityDescription;
-        
+
         return $this;
     }
 
@@ -663,7 +681,7 @@ class Company
     public function setLegalStatus($legalStatus)
     {
         $this->legalStatus = $legalStatus;
-        
+
         return $this;
     }
 
@@ -683,7 +701,7 @@ class Company
     public function setRegistrationCourt($registrationCourt)
     {
         $this->registrationCourt = $registrationCourt;
-        
+
         return $this;
     }
 
@@ -703,7 +721,7 @@ class Company
     public function setRcsNumber($rcsNumber)
     {
         $this->rcsNumber = $rcsNumber;
-        
+
         return $this;
     }
 
@@ -723,7 +741,7 @@ class Company
     public function setRcsDescription($rcsDescription)
     {
         $this->rcsDescription = $rcsDescription;
-        
+
         return $this;
     }
 
@@ -743,7 +761,7 @@ class Company
     public function setRcNumber($rcNumber)
     {
         $this->rcNumber = $rcNumber;
-        
+
         return $this;
     }
 
@@ -763,7 +781,7 @@ class Company
     public function setVatNumber($vatNumber)
     {
         $this->vatNumber = $vatNumber;
-        
+
         return $this;
     }
 
@@ -783,7 +801,7 @@ class Company
     public function setPhone($phone)
     {
         $this->phone = $phone;
-        
+
         return $this;
     }
 
@@ -802,7 +820,7 @@ class Company
     public function setFax($fax)
     {
         $this->fax = $fax;
-        
+
         return $this;
     }
 
@@ -822,7 +840,7 @@ class Company
     public function setShareCapital($shareCapital)
     {
         $this->shareCapital = $shareCapital;
-        
+
         return $this;
     }
 
@@ -842,7 +860,7 @@ class Company
     public function setType($type)
     {
         $this->type = $type;
-        
+
         return $this;
     }
 
@@ -864,7 +882,7 @@ class Company
         $this->tva = $tva;
 
         $this->tvaToSiren();
-        
+
         return $this;
     }
 
@@ -884,7 +902,7 @@ class Company
     public function setCountryCode($countryCode)
     {
         $this->countryCode = $countryCode;
-        
+
         return $this;
     }
 
@@ -904,7 +922,7 @@ class Company
     public function setInfoCode($infoCode)
     {
         $this->infoCode = $infoCode;
-        
+
         return $this;
     }
 
@@ -916,7 +934,7 @@ class Company
     public function setSiren($siren)
     {
         $this->siren = $siren;
-        
+
         return $this;
     }
 
@@ -938,7 +956,7 @@ class Company
         $this->siret = $siret;
 
         $this->siretToSiren();
-        
+
         return $this;
     }
 
@@ -958,7 +976,7 @@ class Company
     public function setNic($nic)
     {
         $this->nic = $nic;
-        
+
         return $this;
     }
 
@@ -978,7 +996,7 @@ class Company
     public function setRegistrationDate($registrationDate)
     {
         $this->registrationDate = $registrationDate;
-        
+
         return $this;
     }
 
@@ -998,7 +1016,7 @@ class Company
     public function setCreationDate($creationDate)
     {
         $this->creationDate = $creationDate;
-        
+
         return $this;
     }
 
@@ -1018,7 +1036,7 @@ class Company
     public function setReasonForFormation($reasonForFormation)
     {
         $this->reasonForFormation = $reasonForFormation;
-        
+
         return $this;
     }
 
@@ -1038,7 +1056,7 @@ class Company
     public function setReasonForClosure($reasonForClosure)
     {
         $this->reasonForClosure = $reasonForClosure;
-        
+
         return $this;
     }
 
@@ -1058,7 +1076,7 @@ class Company
     public function setClosureDate($closureDate)
     {
         $this->closureDate = $closureDate;
-        
+
         return $this;
     }
 
@@ -1078,7 +1096,7 @@ class Company
     public function setDeregistrationDate($deregistrationDate)
     {
         $this->deregistrationDate = $deregistrationDate;
-        
+
         return $this;
     }
 
@@ -1098,7 +1116,7 @@ class Company
     public function setLastAccountDate($lastAccountDate)
     {
         $this->lastAccountDate = $lastAccountDate;
-        
+
         return $this;
     }
 
@@ -1118,7 +1136,7 @@ class Company
     public function setReactivationDate($reactivationDate)
     {
         $this->reactivationDate = $reactivationDate;
-        
+
         return $this;
     }
 
@@ -1138,7 +1156,7 @@ class Company
     public function setProductionRole($productionRole)
     {
         $this->productionRole = $productionRole;
-        
+
         return $this;
     }
 
@@ -1158,7 +1176,7 @@ class Company
     public function setNature($nature)
     {
         $this->nature = $nature;
-        
+
         return $this;
     }
 
@@ -1178,7 +1196,7 @@ class Company
     public function setActivityLocation($activityLocation)
     {
         $this->activityLocation = $activityLocation;
-        
+
         return $this;
     }
 
@@ -1198,7 +1216,7 @@ class Company
     public function setLocationSurface($locationSurface)
     {
         $this->locationSurface = $locationSurface;
-        
+
         return $this;
     }
 
@@ -1218,7 +1236,7 @@ class Company
     public function setSeasonality($seasonality)
     {
         $this->seasonality = $seasonality;
-        
+
         return $this;
     }
 
@@ -1238,7 +1256,7 @@ class Company
     public function setProfessionalText($professionalText)
     {
         $this->professionalText = $professionalText;
-        
+
         return $this;
     }
 
@@ -1258,7 +1276,7 @@ class Company
     public function setNationality($nationality)
     {
         $this->nationality = $nationality;
-        
+
         return $this;
     }
 
@@ -1287,7 +1305,7 @@ class Company
     public function setRating($rating)
     {
         $this->rating = $rating;
-        
+
         return $this;
     }
 
@@ -1307,7 +1325,7 @@ class Company
     public function setCreditLimit($creditLimit)
     {
         $this->creditLimit = $creditLimit;
-        
+
         return $this;
     }
 
@@ -1318,7 +1336,7 @@ class Company
     public function setStatus($status)
     {
         $this->status = $status;
-        
+
         return $this;
     }
 
@@ -1338,7 +1356,7 @@ class Company
     public function setTradingToDate($tradingToDate)
     {
         $this->tradingToDate = $tradingToDate;
-        
+
         return $this;
     }
 
@@ -1358,7 +1376,7 @@ class Company
     public function setDepartmentDescription($departmentDescription)
     {
         $this->departmentDescription = $departmentDescription;
-        
+
         return $this;
     }
 
@@ -1378,7 +1396,7 @@ class Company
     public function setDepartment($department)
     {
         $this->department = $department;
-        
+
         return $this;
     }
 
@@ -1398,7 +1416,7 @@ class Company
     public function setRegion($region)
     {
         $this->region = $region;
-        
+
         return $this;
     }
 
@@ -1418,7 +1436,7 @@ class Company
     public function setDistrict($district)
     {
         $this->district = $district;
-        
+
         return $this;
     }
 
@@ -1438,7 +1456,7 @@ class Company
     public function setArea($area)
     {
         $this->area = $area;
-        
+
         return $this;
     }
 
@@ -1458,7 +1476,7 @@ class Company
     public function setMunicipality($municipality)
     {
         $this->municipality = $municipality;
-        
+
         return $this;
     }
 
@@ -1478,7 +1496,7 @@ class Company
     public function setSizeOfUrbanArea($sizeOfUrbanArea)
     {
         $this->sizeOfUrbanArea = $sizeOfUrbanArea;
-        
+
         return $this;
     }
 
@@ -1498,7 +1516,7 @@ class Company
     public function setBranches($branches)
     {
         $this->branches = $branches;
-        
+
         return $this;
     }
 
@@ -1518,7 +1536,7 @@ class Company
     public function setNumberOfBranches($numberOfBranches)
     {
         $this->numberOfBranches = $numberOfBranches;
-        
+
         return $this;
     }
 
@@ -1538,7 +1556,7 @@ class Company
     public function setRegionality($regionality)
     {
         $this->regionality = $regionality;
-        
+
         return $this;
     }
 
@@ -1558,7 +1576,7 @@ class Company
     public function setMonoActivityStatus($monoActivityStatus)
     {
         $this->monoActivityStatus = $monoActivityStatus;
-        
+
         return $this;
     }
 
@@ -1578,7 +1596,7 @@ class Company
     public function setBalanceSheets($balanceSheets)
     {
         $this->balanceSheets = $balanceSheets;
-        
+
         return $this;
     }
 
@@ -1598,7 +1616,7 @@ class Company
     public function setPreviousRatings($previousRatings)
     {
         $this->previousRatings = $previousRatings;
-        
+
         return $this;
     }
 
@@ -1618,7 +1636,7 @@ class Company
     public function setJudgements($judgements)
     {
         $this->judgements = $judgements;
-        
+
         return $this;
     }
 
@@ -1638,7 +1656,7 @@ class Company
     public function setLeaderships($leaderships)
     {
         $this->leaderships = $leaderships;
-        
+
         return $this;
     }
 
@@ -1658,7 +1676,7 @@ class Company
     public function setPublications($publications)
     {
         $this->publications = $publications;
-        
+
         return $this;
     }
 
@@ -1678,7 +1696,7 @@ class Company
     public function setCompanyEvents($companyEvents)
     {
         $this->companyEvents = $companyEvents;
-        
+
         return $this;
     }
 
@@ -1698,7 +1716,67 @@ class Company
     public function setEstablishmentEvents($establishmentEvents)
     {
         $this->establishmentEvents = $establishmentEvents;
-        
+
+        return $this;
+    }
+
+    /**
+     *
+     * @return array 
+     */
+    public function getUltimateParents()
+    {
+        return $this->ultimateParents;
+    }
+
+    /**
+     *
+     * @param array $ultimateParents 
+     */
+    public function setUltimateParents($ultimateParents)
+    {
+        $this->ultimateParents = $ultimateParents;
+
+        return $this;
+    }
+
+    /**
+     *
+     * @return integer $numberOfCompanies
+     */
+    public function getNumberOfCompanies()
+    {
+        return $this->numberOfCompanies;
+    }
+
+    /**
+     *
+     * @param integer $numberOfCompanies 
+     */
+    public function setNumberOfCompanies($numberOfCompanies)
+    {
+        $this->numberOfCompanies = $numberOfCompanies;
+
+        return $this;
+    }
+
+    /**
+     *
+     * @return string $parentCompanyName
+     */
+    public function getParentCompanyName()
+    {
+        return $this->parentCompanyName;
+    }
+
+    /**
+     *
+     * @param string $parentCompanyName 
+     */
+    public function setParentCompanyName($parentCompanyName)
+    {
+        $this->parentCompanyName = $parentCompanyName;
+
         return $this;
     }
 
@@ -1712,7 +1790,7 @@ class Company
             $this->setInfoCode($matches[2]);
             $this->setSiren($matches[3]);
         }
-        
+
         return $this;
     }
 
@@ -1725,7 +1803,7 @@ class Company
             $this->setSiren($matches[1]);
             $this->setNic($matches[2]);
         }
-        
+
         return $this;
     }
 

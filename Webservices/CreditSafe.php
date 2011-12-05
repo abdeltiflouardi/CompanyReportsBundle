@@ -316,10 +316,12 @@ class CreditSafe implements \Serializable
             'NumberOfBranches'      => 'numberofbranches',
             'MonoActivityStatus'    => 'monoactivitystatus',
             'Regionality'           => 'regionality',
+            'NumberOfCompanies'     => 'numberofcompanies',
         );
 
         foreach ($mapper as $method => $attr)
-            $this->companyReports->{'set' . $method}($domXML->getElementsByTagName($attr)->item(0)->nodeValue);
+            if ($domXML->getElementsByTagName($attr)->length)
+                $this->companyReports->{'set' . $method}($domXML->getElementsByTagName($attr)->item(0)->nodeValue);
 
         // Return trading to date of the last 3 months
         $i       = 0;
@@ -404,6 +406,28 @@ class CreditSafe implements \Serializable
         }
         $this->companyReports->setEstablishmentEvents($establishmentEvents);
 
+        // Ultimate parents
+        $ultimateParents = array();
+        foreach ($sx->body->company->groupstructure->ultimateparents->ultimateparent as $ultimateParent) {
+            $ultimateParents[] = $this->nodeToArray($ultimateParent);
+        }
+        $this->companyReports->setUltimateParents($ultimateParents);
+
+        // Direct parent company name
+        $rcsNumber = $this->companyReports->getRcsNumber();
+        $childs    = $domXML->getElementsByTagName('child');
+        foreach ($childs as $child) {
+            $number = $child->getElementsByTagName('companynumber')->item(0)->nodeValue;
+
+            if ($rcsNumber == $number) {
+                if ($child->parentNode)
+                    if ($child->parentNode->parentNode)
+                        if ($child->parentNode->parentNode->getElementsByTagName('name')->item(0)->nodeValue)
+                            if ($child->parentNode->parentNode->getElementsByTagName('name')->length)
+                                $this->companyReports->setParentCompanyName ($child->parentNode->parentNode->getElementsByTagName('name')->item(0)->nodeValue);
+            }
+        }
+
         return $this;
     }
 
@@ -477,9 +501,9 @@ class CreditSafe implements \Serializable
         $array = array();
         foreach ($node->children() as $child) {
             if (!$child->children())
-                $array[$child->getName()] = $child;
+                $array[$child->getName()]   = $child;
             else
-                $array[$child->getName()] = $this->nodeToArray($child);
+                $array[$child->getName()][] = $this->nodeToArray($child);
         }
         return $array;
     }
