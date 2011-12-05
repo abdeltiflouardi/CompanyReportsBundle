@@ -404,6 +404,12 @@ class Company
 
     /**
      *
+     * @var array $establishmentEvents
+     */
+    private $establishmentEvents;
+
+    /**
+     *
      * @return string 
      */
     public function getReportId()
@@ -1532,7 +1538,7 @@ class Company
 
     /**
      *
-     * @return type 
+     * @return array 
      */
     public function getCompanyEvents()
     {
@@ -1541,11 +1547,29 @@ class Company
 
     /**
      *
-     * @param type $companyEvents 
+     * @param array $companyEvents 
      */
     public function setCompanyEvents($companyEvents)
     {
         $this->companyEvents = $companyEvents;
+    }
+
+    /**
+     *
+     * @return array $establishmentEvents
+     */
+    public function getEstablishmentEvents()
+    {
+        return $this->establishmentEvents;
+    }
+
+    /**
+     *
+     * @param array $establishmentEvents 
+     */
+    public function setEstablishmentEvents($establishmentEvents)
+    {
+        $this->establishmentEvents = $establishmentEvents;
     }
 
     /**

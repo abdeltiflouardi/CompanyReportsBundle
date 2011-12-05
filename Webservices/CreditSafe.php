@@ -397,6 +397,13 @@ class CreditSafe implements \Serializable
         }
         $this->companyReports->setCompanyEvents($companyEvents);
 
+        // establishmentEvents 
+        $establishmentEvents = array();
+        foreach ($sx->body->company->eventhistory->establishmenthistory->establishment as $establishmentEvent) {
+            $establishmentEvents[] = $this->nodeToArray($establishmentEvent);
+        }
+        $this->companyReports->setEstablishmentEvents($establishmentEvents);
+
         return $this;
     }
 
