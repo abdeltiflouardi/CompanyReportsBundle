@@ -2,6 +2,8 @@
 
 namespace OS\CompanyReportsBundle;
 
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+
 /**
  * {inherite}
  *
@@ -94,6 +96,8 @@ class CompanyReports extends Company
     public function setLocale($locale)
     {
         $this->locale = $locale;
+        
+        return $this;
     }
 
     /**
@@ -112,6 +116,8 @@ class CompanyReports extends Company
     public function setCountry($country)
     {
         $this->country = $country;
+        
+        return $this;
     }
 
     /**
@@ -121,6 +127,8 @@ class CompanyReports extends Company
     public function setWebservices($webservices)
     {
         $this->webservices = $webservices;
+        
+        return $this;
     }
 
     /**
@@ -148,6 +156,8 @@ class CompanyReports extends Company
     public function setWebserviceClassName($webserviceClassName)
     {
         $this->webserviceClassName = $webserviceClassName;
+        
+        return $this;
     }
 
     /**
@@ -166,6 +176,8 @@ class CompanyReports extends Company
     public function setLogin($login)
     {
         $this->login = $login;
+        
+        return $this;
     }
 
     /**
@@ -184,6 +196,8 @@ class CompanyReports extends Company
     public function setPassword($password)
     {
         $this->password = $password;
+        
+        return $this;
     }
 
     /**
@@ -202,6 +216,8 @@ class CompanyReports extends Company
     public function setContainer($container)
     {
         $this->container = $container;
+        
+        return $this;
     }
 
     /**
@@ -220,6 +236,8 @@ class CompanyReports extends Company
     public function setCacheDir($cacheDir)
     {
         $this->cacheDir = $cacheDir;
+        
+        return $this;
     }
     
     /**
@@ -241,6 +259,8 @@ class CompanyReports extends Company
     public function setCacheFile($cacheFile)
     {
         $this->cacheFile = $cacheFile;
+        
+        return $this;
     }    
     /**
      * return webservice
@@ -249,6 +269,9 @@ class CompanyReports extends Company
     {
         $class = $this->getWebserviceClassName();
 
+        if (!$class)
+            throw new NotFoundHttpException(sprintf('No webservice was found for this country "%s"', $this->getCountryCode()));
+        
         return new $class($this);
     }
 
@@ -270,8 +293,8 @@ class CompanyReports extends Company
         // list of declared webservices
         $this->setWebservices($this->container->getParameter('company.reports.webservices'));
 
-        // Set the current locale
-        $this->setLocale($this->container->get('request')->getLocale());
+        // Set the current Country Code
+        $this->setLocale(strtolower($this->getCountryCode()));
 
         // Set the current country
         $webservices = $this->getWebservices();
@@ -287,6 +310,8 @@ class CompanyReports extends Company
             $this->setLogin($webservice['login']);
             $this->setPassword($webservice['password']);
         }
+        
+        return $this;
     }
 
 }
