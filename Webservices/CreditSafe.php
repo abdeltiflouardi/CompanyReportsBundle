@@ -21,6 +21,7 @@ class CreditSafe implements \Serializable
      * @var string $urlWSDL
      */
     private $urlWSDL = "https://www.creditsafe.fr/getdata/service/CSFRServices.asmx?WSDL";
+
     /**
      * Result of current search result (xmlresponse)
      * - Text format: xml
@@ -28,6 +29,7 @@ class CreditSafe implements \Serializable
      * @var string $XMLResult
      */
     private $XMLResult;
+
     /**
      * Schema of current search (xmlrequest)
      * - Text format: xml
@@ -35,6 +37,7 @@ class CreditSafe implements \Serializable
      * @var string $XMLSchema
      */
     private $XMLSchema;
+
     /**
      * Entity company reports
      * 
@@ -378,8 +381,22 @@ class CreditSafe implements \Serializable
         foreach ($sx->body->company->directors->director as $director) {
             $leaderships[] = $this->nodeToArray($director);
         }
-        $this->companyReports->setLeaderships($leaderships);        
-        
+        $this->companyReports->setLeaderships($leaderships);
+
+        // Publications
+        $publications = array();
+        foreach ($sx->body->company->eventhistory->gazette->publication as $publication) {
+            $publications[] = $this->nodeToArray($publication);
+        }
+        $this->companyReports->setPublications($publications);
+
+        // companyEvents 
+        $companyEvents = array();
+        foreach ($sx->body->company->eventhistory->companyhistory->company as $companyEvent) {
+            $companyEvents[] = $this->nodeToArray($companyEvent);
+        }
+        $this->companyReports->setCompanyEvents($companyEvents);
+
         return $this;
     }
 

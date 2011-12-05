@@ -389,7 +389,19 @@ class Company
      * @var array $leaderships
      */
     private $leaderships;
-    
+
+    /**
+     *
+     * @var array $publications
+     */
+    private $publications;
+
+    /**
+     *
+     * @var array $companyEvents
+     */
+    private $companyEvents;
+
     /**
      *
      * @return string 
@@ -1498,8 +1510,44 @@ class Company
     public function setLeaderships($leaderships)
     {
         $this->leaderships = $leaderships;
-    }    
-    
+    }
+
+    /**
+     *
+     * @return array $publications
+     */
+    public function getPublications()
+    {
+        return $this->publications;
+    }
+
+    /**
+     *
+     * @param array $publications 
+     */
+    public function setPublications($publications)
+    {
+        $this->publications = $publications;
+    }
+
+    /**
+     *
+     * @return type 
+     */
+    public function getCompanyEvents()
+    {
+        return $this->companyEvents;
+    }
+
+    /**
+     *
+     * @param type $companyEvents 
+     */
+    public function setCompanyEvents($companyEvents)
+    {
+        $this->companyEvents = $companyEvents;
+    }
+
     /**
      * Convert tva number to siren
      */
