@@ -266,6 +266,9 @@ class CreditSafe implements \Serializable
     {
         $domXML = $this->getXMLResult(false);
 
+        if ($domXML->getElementsByTagName('errors')->length > 0)
+                return;
+
         $mapper = array(
             'ReportId'              => 'reportid',
             'ReportName'            => 'reportname',
