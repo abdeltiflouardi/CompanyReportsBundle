@@ -247,7 +247,7 @@ class CompanyReports extends Company
     public function getCacheFile()
     {
         if (!$this->cacheFile)
-            $this->cacheFile = $this->getCacheDir () . DIRECTORY_SEPARATOR . $this->getSiret () . '.xml';
+            $this->cacheFile = $this->getCacheDir () . DIRECTORY_SEPARATOR . $this->getSiren () . '.xml';
             
         return $this->cacheFile;
     }

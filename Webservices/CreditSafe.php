@@ -260,7 +260,7 @@ class CreditSafe implements \Serializable
 
     /**
      *
-     * @return \OS\CompanyReportsBundle\Webservices\CreditSafe 
+     * @return OS\CompanyReportsBundle\Webservices\CreditSafe 
      */
     public function bindData()
     {
