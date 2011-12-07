@@ -67,7 +67,10 @@ class CreditSafe implements \Serializable
      */
     public function directorSearch()
     {
-        
+        $xml = $this->getDirectorSearchXMLSchema();
+
+        $this->setXMLSchema($xml)
+                ->callWS();
     }
 
     /**
@@ -107,7 +110,8 @@ class CreditSafe implements \Serializable
             foreach ($options as $option)
                 $this->{$option}();
 
-            $this->cacheCompanyInfos();
+            if ($this->companyReports->getCacheFile())
+                $this->cacheCompanyInfos();
         }
 
         $this->bindData();
@@ -123,6 +127,8 @@ class CreditSafe implements \Serializable
         $result = $client->__SoapCall('GetData', array($this->getData()));
 
         $this->XMLResult = $result->GetDataResult;
+
+        $this->companyReports->setXmlResult($this->XMLResult);
 
         return $this;
     }
@@ -164,6 +170,38 @@ class CreditSafe implements \Serializable
     public function getXMLSchema()
     {
         return $this->XMLSchema;
+    }
+
+    /**
+     * 
+     */
+    public function getDirectorSearchXMLSchema()
+    {
+        $xml = $this->getDefaultXMLSchema();
+
+        $domXML = new DOMDocument();
+        $domXML->loadXML($xml);
+
+        $domXML->getElementsByTagName('operation')->item(0)->appendChild($domXML->createTextNode('directorsearch'));
+        $domXML->getElementsByTagName('package')->item(0)->appendChild($domXML->createTextNode('standard'));
+
+        $element       = $domXML->getElementsByTagName('companynumber')->item(0);
+        $parentElement = $element->parentNode;
+
+        $parentElement->removeChild($element);
+
+        $elemCompanyname = $domXML->createElement('name', $this->getCompanyReports()->getDirectorName());
+        $parentElement->appendChild($elemCompanyname);
+
+        if ($this->getCompanyReports()->getChristianName()) {
+            $elemCompanyname = $domXML->createElement('christian_name', $this->getCompanyReports()->getChristianName());
+            $parentElement->appendChild($elemCompanyname);
+        }
+
+        $elemCompanyname = $domXML->createElement('namesearchmode', 'contain');
+        $parentElement->appendChild($elemCompanyname);
+
+        return $domXML->saveXML();
     }
 
     /**
@@ -267,7 +305,7 @@ class CreditSafe implements \Serializable
         $domXML = $this->getXMLResult(false);
 
         if ($domXML->getElementsByTagName('errors')->length > 0)
-                return;
+            return;
 
         $mapper = array(
             'ReportId'              => 'reportid',
@@ -341,7 +379,8 @@ class CreditSafe implements \Serializable
         $this->companyReports->setTradingToDate($tarding);
 
         // courtregistrynumber
-        $this->companyReports->setRcNumber($domXML->getElementsByTagName('courtregistrynumber')->item(1)->nodeValue);
+        if ($domXML->getElementsByTagName('courtregistrynumber')->item(1))
+            $this->companyReports->setRcNumber($domXML->getElementsByTagName('courtregistrynumber')->item(1)->nodeValue);
 
         // Branches
         $i        = 0;
@@ -362,58 +401,66 @@ class CreditSafe implements \Serializable
         $sx = new SimpleXMLElement($domXML->saveXML());
 
         // Balancesheet
-        foreach ($sx->body->company->balancesynthesis->balancesheet as $balancesheet) {
-            $balanceSheets[] = $this->nodeToArray($balancesheet);
-        }
+        if ($sx->body->company->balancesynthesis)
+            foreach ($sx->body->company->balancesynthesis->balancesheet as $balancesheet) {
+                $balanceSheets[] = $this->nodeToArray($balancesheet);
+            }
         $this->companyReports->setBalanceSheets($balanceSheets);
 
         // Previous rating
         $previousRatings = array();
-        foreach ($sx->body->company->ratings->previousratings->previousrating as $previousrating) {
-            $previousRatings[] = $this->nodeToArray($previousrating);
-        }
+        if ($sx->body->company->ratings)
+            foreach ($sx->body->company->ratings->previousratings->previousrating as $previousrating) {
+                $previousRatings[] = $this->nodeToArray($previousrating);
+            }
         $this->companyReports->setPreviousRatings($previousRatings);
 
         // Judgement
         $judgements = array();
-        foreach ($sx->body->company->judgements->judgement as $judgement) {
-            $judgements[] = $this->nodeToArray($judgement);
-        }
+        if ($sx->body->company->judgements)
+            foreach ($sx->body->company->judgements->judgement as $judgement) {
+                $judgements[] = $this->nodeToArray($judgement);
+            }
         $this->companyReports->setJudgements($judgements);
 
         // Directors
         $leaderships = array();
-        foreach ($sx->body->company->directors->director as $director) {
-            $leaderships[] = $this->nodeToArray($director);
-        }
+        if ($sx->body->company->directors)
+            foreach ($sx->body->company->directors->director as $director) {
+                $leaderships[] = $this->nodeToArray($director);
+            }
         $this->companyReports->setLeaderships($leaderships);
 
         // Publications
         $publications = array();
-        foreach ($sx->body->company->eventhistory->gazette->publication as $publication) {
-            $publications[] = $this->nodeToArray($publication);
-        }
+        if ($sx->body->company->eventhistory)
+            foreach ($sx->body->company->eventhistory->gazette->publication as $publication) {
+                $publications[] = $this->nodeToArray($publication);
+            }
         $this->companyReports->setPublications($publications);
 
         // companyEvents 
         $companyEvents = array();
-        foreach ($sx->body->company->eventhistory->companyhistory->company as $companyEvent) {
-            $companyEvents[] = $this->nodeToArray($companyEvent);
-        }
+        if ($sx->body->company->eventhistory)
+            foreach ($sx->body->company->eventhistory->companyhistory->company as $companyEvent) {
+                $companyEvents[] = $this->nodeToArray($companyEvent);
+            }
         $this->companyReports->setCompanyEvents($companyEvents);
 
         // establishmentEvents 
         $establishmentEvents = array();
-        foreach ($sx->body->company->eventhistory->establishmenthistory->establishment as $establishmentEvent) {
-            $establishmentEvents[] = $this->nodeToArray($establishmentEvent);
-        }
+        if ($sx->body->company->eventhistory)
+            foreach ($sx->body->company->eventhistory->establishmenthistory->establishment as $establishmentEvent) {
+                $establishmentEvents[] = $this->nodeToArray($establishmentEvent);
+            }
         $this->companyReports->setEstablishmentEvents($establishmentEvents);
 
         // Ultimate parents
         $ultimateParents = array();
-        foreach ($sx->body->company->groupstructure->ultimateparents->ultimateparent as $ultimateParent) {
-            $ultimateParents[] = $this->nodeToArray($ultimateParent);
-        }
+        if ($sx->body->company->groupstructure)
+            foreach ($sx->body->company->groupstructure->ultimateparents->ultimateparent as $ultimateParent) {
+                $ultimateParents[] = $this->nodeToArray($ultimateParent);
+            }
         $this->companyReports->setUltimateParents($ultimateParents);
 
         // Direct parent company name
@@ -427,9 +474,17 @@ class CreditSafe implements \Serializable
                     if ($child->parentNode->parentNode)
                         if ($child->parentNode->parentNode->getElementsByTagName('name')->item(0)->nodeValue)
                             if ($child->parentNode->parentNode->getElementsByTagName('name')->length)
-                                $this->companyReports->setParentCompanyName ($child->parentNode->parentNode->getElementsByTagName('name')->item(0)->nodeValue);
+                                $this->companyReports->setParentCompanyName($child->parentNode->parentNode->getElementsByTagName('name')->item(0)->nodeValue);
             }
         }
+
+        // Ultimate parents
+        $results = array();
+        if ($sx->body->results)
+            foreach ($sx->body->results->result as $result) {
+                $results[] = $this->nodeToArrayV2($result);
+            }
+        $this->companyReports->setResult($results);
 
         return $this;
     }
@@ -507,6 +562,23 @@ class CreditSafe implements \Serializable
                 $array[$child->getName()]   = $child;
             else
                 $array[$child->getName()][] = $this->nodeToArray($child);
+        }
+        return $array;
+    }
+    
+    /**
+     *
+     * @param type $node
+     * @return type 
+     */
+    function nodeToArrayV2($node)
+    {
+        $array = array();
+        foreach ($node->children() as $child) {
+            if ($child[0])
+                $array[$child->getName()]   = (string)$child[0];
+            else
+                $array[$child->getName()][] = $this->nodeToArrayV2($child);
         }
         return $array;
     }

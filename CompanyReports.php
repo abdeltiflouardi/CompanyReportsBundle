@@ -52,12 +52,12 @@ class CompanyReports extends Company
      * @var string
      */
     private $cacheDir;
-    
+
     /**
      * 
      */
     private $cacheFile;
-    
+
     /**
      * login to login into webservice
      * 
@@ -72,11 +72,34 @@ class CompanyReports extends Company
      */
     private $password;
 
+    /**
+     *
+     * @var type 
+     */
+    private $xmlResult;
+
+    /**
+     *
+     * @var type 
+     */
+    private $result;
+
+    /**
+     *
+     * @var type 
+     */
+    private $criteria;
+    
+    /**
+     *
+     * @param type $container
+     * @param type $cacheDir 
+     */
     public function __construct($container, $cacheDir = null)
     {
         $this->container = $container;
         $this->cacheDir = $cacheDir;
-        
+
         $this->dispatch();
     }
 
@@ -96,7 +119,7 @@ class CompanyReports extends Company
     public function setLocale($locale)
     {
         $this->locale = $locale;
-        
+
         return $this;
     }
 
@@ -116,7 +139,7 @@ class CompanyReports extends Company
     public function setCountry($country)
     {
         $this->country = $country;
-        
+
         return $this;
     }
 
@@ -127,7 +150,7 @@ class CompanyReports extends Company
     public function setWebservices($webservices)
     {
         $this->webservices = $webservices;
-        
+
         return $this;
     }
 
@@ -156,7 +179,7 @@ class CompanyReports extends Company
     public function setWebserviceClassName($webserviceClassName)
     {
         $this->webserviceClassName = $webserviceClassName;
-        
+
         return $this;
     }
 
@@ -176,7 +199,7 @@ class CompanyReports extends Company
     public function setLogin($login)
     {
         $this->login = $login;
-        
+
         return $this;
     }
 
@@ -196,7 +219,7 @@ class CompanyReports extends Company
     public function setPassword($password)
     {
         $this->password = $password;
-        
+
         return $this;
     }
 
@@ -216,7 +239,7 @@ class CompanyReports extends Company
     public function setContainer($container)
     {
         $this->container = $container;
-        
+
         return $this;
     }
 
@@ -236,19 +259,26 @@ class CompanyReports extends Company
     public function setCacheDir($cacheDir)
     {
         $this->cacheDir = $cacheDir;
-        
+
         return $this;
     }
-    
+
     /**
      *
      * @return type 
      */
     public function getCacheFile()
     {
-        if (!$this->cacheFile)
-            $this->cacheFile = $this->getCacheDir () . DIRECTORY_SEPARATOR . $this->getSiren () . '.xml';
-            
+        if (!$this->cacheFile) {
+            if ($this->getSiren())
+                $filename = $this->getSiren();
+            elseif ($this->getCriteria())
+                $filename = $this->getCriteria();
+
+            $this->cacheFile = $this->getCacheDir() . DIRECTORY_SEPARATOR . $filename . '.xml';
+        }
+
+
         return $this->cacheFile;
     }
 
@@ -259,9 +289,64 @@ class CompanyReports extends Company
     public function setCacheFile($cacheFile)
     {
         $this->cacheFile = $cacheFile;
-        
+
         return $this;
+    }
+
+    /**
+     *
+     * @return type 
+     */
+    public function getXmlResult()
+    {
+        return $this->xmlResult;
+    }
+
+    /**
+     *
+     * @param type $xmlResult 
+     */
+    public function setXmlResult($xmlResult)
+    {
+        $this->xmlResult = $xmlResult;
+    }
+
+    /**
+     *
+     * @return type 
+     */
+    public function getResult()
+    {
+        return $this->result;
+    }
+
+    /**
+     *
+     * @param type $result 
+     */
+    public function setResult($result)
+    {
+        $this->result = $result;
+    }
+
+    /**
+     *
+     * @return type 
+     */
+    public function getCriteria()
+    {
+        return $this->criteria;
+    }
+
+    /**
+     *
+     * @param type $criteria 
+     */
+    public function setCriteria($criteria)
+    {
+        $this->criteria = $criteria;
     }    
+
     /**
      * return webservice
      */
@@ -271,7 +356,7 @@ class CompanyReports extends Company
 
         if (!$class)
             throw new NotFoundHttpException(sprintf('No webservice was found for this country "%s"', $this->getCountryCode()));
-        
+
         return new $class($this);
     }
 
@@ -310,7 +395,7 @@ class CompanyReports extends Company
             $this->setLogin($webservice['login']);
             $this->setPassword($webservice['password']);
         }
-        
+
         return $this;
     }
 

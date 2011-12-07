@@ -231,37 +231,37 @@ class Company
 
     /**
      *
-     * @var type $name
+     * @var string $name
      */
     private $name;
 
     /**
      *
-     * @var type $additionToName
+     * @var string $additionToName
      */
     private $additionToName;
 
     /**
      *
-     * @var type $address
+     * @var string $address
      */
     private $address;
 
     /**
      *
-     * @var type $additionToAddress
+     * @var string $additionToAddress
      */
     private $additionToAddress;
 
     /**
      *
-     * @var type $specialDistribution
+     * @var string $specialDistribution
      */
     private $specialDistribution;
 
     /**
      *
-     * @var type $distributionLine
+     * @var string $distributionLine
      */
     private $distributionLine;
 
@@ -272,31 +272,31 @@ class Company
 
     /**
      *
-     * @var type $nationality
+     * @var string $nationality
      */
     private $nationality;
 
     /**
      *
-     * @var type $status
+     * @var string $status
      */
     private $status;
 
     /**
      *
-     * @var type $rating
+     * @var string $rating
      */
     private $rating;
 
     /**
      *
-     * @var type $creditLimit
+     * @var string $creditLimit
      */
     private $creditLimit;
 
     /**
      *
-     * @var type $tradingToDate
+     * @var array $tradingToDate
      */
     private $tradingToDate = array();
 
@@ -425,6 +425,18 @@ class Company
      * @var string $parentCompanyName
      */
     private $parentCompanyName;
+
+    /**
+     *
+     * @var string $directorName
+     */
+    private $directorName;
+    
+    /**
+     *
+     * @var string $christianName
+     */
+    private $christianName;
 
     /**
      *
@@ -1778,6 +1790,42 @@ class Company
         $this->parentCompanyName = $parentCompanyName;
 
         return $this;
+    }
+
+    /**
+     *
+     * @return string $directorName
+     */
+    public function getDirectorName()
+    {
+        return $this->directorName;
+    }
+
+    /**
+     *
+     * @param string $directorName 
+     */
+    public function setDirectorName($directorName)
+    {
+        $this->directorName = $directorName;
+    }
+    
+    /**
+     *
+     * @return type 
+     */
+    public function getChristianName()
+    {
+        return $this->christianName;
+    }
+
+    /**
+     *
+     * @param type $christianName 
+     */
+    public function setChristianName($christianName)
+    {
+        $this->christianName = $christianName;
     }
 
     /**
