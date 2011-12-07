@@ -565,7 +565,7 @@ class CreditSafe implements \Serializable
         }
         return $array;
     }
-    
+
     /**
      *
      * @param type $node
@@ -576,7 +576,7 @@ class CreditSafe implements \Serializable
         $array = array();
         foreach ($node->children() as $child) {
             if ($child[0])
-                $array[$child->getName()]   = (string)$child[0];
+                $array[$child->getName()]   = (string) $child[0];
             else
                 $array[$child->getName()][] = $this->nodeToArrayV2($child);
         }

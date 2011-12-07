@@ -431,7 +431,7 @@ class Company
      * @var string $directorName
      */
     private $directorName;
-    
+
     /**
      *
      * @var string $christianName
@@ -1809,7 +1809,7 @@ class Company
     {
         $this->directorName = $directorName;
     }
-    
+
     /**
      *
      * @return type 
