@@ -283,7 +283,7 @@ class CreditSafe implements \Serializable
     /**
      *
      * @param type $returnString
-     * @return \DOMDocument 
+     * @return DOMDocument 
      */
     public function getXMLResult($returnString = true)
     {

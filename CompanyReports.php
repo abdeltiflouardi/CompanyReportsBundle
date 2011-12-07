@@ -89,7 +89,7 @@ class CompanyReports extends Company
      * @var type 
      */
     private $criteria;
-    
+
     /**
      *
      * @param type $container
@@ -278,7 +278,6 @@ class CompanyReports extends Company
             $this->cacheFile = $this->getCacheDir() . DIRECTORY_SEPARATOR . $filename . '.xml';
         }
 
-
         return $this->cacheFile;
     }
 
@@ -345,7 +344,9 @@ class CompanyReports extends Company
     public function setCriteria($criteria)
     {
         $this->criteria = $criteria;
-    }    
+
+        return $this;
+    }
 
     /**
      * return webservice
@@ -395,6 +396,9 @@ class CompanyReports extends Company
             $this->setLogin($webservice['login']);
             $this->setPassword($webservice['password']);
         }
+
+        // Initialize cache file
+        $this->setCacheFile(null);
 
         return $this;
     }
