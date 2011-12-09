@@ -1,7 +1,15 @@
 parameters:
     company_reports.class: OS\CompanyReportsBundle\CompanyReports
+    validator.tva.number.class: OS\CompanyReportsBundle\Validator\Constraint\TVANumberValidator
 
 services:
     company.reports:
         class: %company_reports.class%
         arguments: ["@service_container", %kernel.cache_dir%]
+
+    validator.tva.number:
+        class: %validator.tva.number.class%
+        tags:
+          - { name: validator.constraint_validator, alias: validator.tva.number }
+        arguments: ["@request"]
+        scope: request
