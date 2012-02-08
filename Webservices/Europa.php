@@ -126,6 +126,10 @@ class Europa implements \Serializable
      */
     public function bindData()
     {
+        if (!$this->result->valid) {
+            return $this;
+        }
+
         $name = explode(' ', $this->result->traderName, 2);
         $traderAddress = preg_split ('/$\R?^/m', $this->result->traderAddress);
 
