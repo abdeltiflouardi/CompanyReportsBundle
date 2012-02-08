@@ -180,6 +180,8 @@ class CompanyReports extends Company
     {
         $this->webserviceClassName = $webserviceClassName;
 
+        $this->setCacheFile(null);
+
         return $this;
     }
 
@@ -270,10 +272,13 @@ class CompanyReports extends Company
     public function getCacheFile()
     {
         if (!$this->cacheFile) {
-            if ($this->getSiren())
+            if ($this->getSiren()) {
                 $filename = $this->getSiren();
-            elseif ($this->getCriteria())
+            } elseif ($this->getCriteria()) {
                 $filename = $this->getCriteria();
+            }
+
+            $filename = sprintf('%s_%s', md5($this->getWebserviceClassName()), $filename);
 
             $this->cacheFile = $this->getCacheDir() . DIRECTORY_SEPARATOR . $filename . '.xml';
         }
