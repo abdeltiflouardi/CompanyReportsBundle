@@ -125,7 +125,18 @@ class Europa implements \Serializable
      * @return OS\CompanyReportsBundle\Webservices\Europa
      */
     public function bindData()
-    {        
+    {
+        $name = explode(' ', $this->result->traderName, 2);
+        $traderAddress = preg_split ('/$\R?^/m', $this->result->traderAddress);
+
+        $address = count($traderAddress) > 2 ? sprintf('%s %s', $traderAddress[0], $traderAddress[1]) : $traderAddress[0];
+        $additionalAddress = end($traderAddress);
+
+        $this->companyReports->setReportName($name[1]);
+        $this->companyReports->setLegalStatus($name[0]);
+        $this->companyReports->setAddress($address);
+        $this->companyReports->setAdditionToAddress($additionalAddress);
+
         return $this;
     }
 
