@@ -1,4 +1,5 @@
-CompanyReportsBundle is a library to get a many informations of companies
+CompanyReportsBundle is a library to get companies informations
 
-Current webservice:
+Current webservices:
     * CreditSafe: France
+    * Cribis: Italie
