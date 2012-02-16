@@ -130,7 +130,11 @@ class Europa implements \Serializable
             return $this;
         }
 
-        $name = explode(' ', $this->result->traderName, 2);
+        if ($this->companyReports->getLocale() == 'FR') {
+            $name = explode(' ', $this->result->traderName, 2);
+        } else {
+            $name = array('', $this->result->traderName);
+        }
         $traderAddress = preg_split ('/$\R?^/m', $this->result->traderAddress);
 
         $address = count($traderAddress) > 2 ? sprintf('%s %s', $traderAddress[0], $traderAddress[1]) : $traderAddress[0];

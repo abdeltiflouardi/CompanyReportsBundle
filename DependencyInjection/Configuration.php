@@ -41,6 +41,10 @@ class Configuration implements ConfigurationInterface
                             ->scalarNode('password')->defaultNull()->end()                
                             ->scalarNode('country')->defaultNull()->end()
                             ->scalarNode('locale')->defaultNull()->end()
+                            // Config Cribis
+                            ->scalarNode('product_code')->defaultNull()->end()
+                            ->scalarNode('reference')->defaultNull()->end()
+                            ->scalarNode('application_id')->defaultNull()->end()
                         ->end()
                     ->end()
                 ->end()     

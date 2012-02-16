@@ -74,6 +74,24 @@ class CompanyReports extends Company
 
     /**
      *
+     * @var string 
+     */
+    private $cribisApplicationId;
+
+    /**
+     *
+     * @var string 
+     */
+    private $cribisProductCode;
+
+    /**
+     *
+     * @var string 
+     */
+    private $cribisReference;
+
+    /**
+     *
      * @var type 
      */
     private $xmlResult;
@@ -224,6 +242,60 @@ class CompanyReports extends Company
 
         return $this;
     }
+
+    /**
+     *
+     * @return string 
+     */
+    public function getCribisApplicationId()
+    {
+        return $this->cribisApplicationId;
+    }
+
+    /**
+     *
+     * @param string $cribisApplicationId 
+     */
+    public function setCribisApplicationId($cribisApplicationId)
+    {
+        $this->cribisApplicationId = $cribisApplicationId;
+    }
+
+    /**
+     *
+     * @return string 
+     */
+    public function getCribisProductCode()
+    {
+        return $this->cribisProductCode;
+    }
+
+    /**
+     *
+     * @param string $cribisProductCode 
+     */
+    public function setCribisProductCode($cribisProductCode)
+    {
+        $this->cribisProductCode = $cribisProductCode;
+    }
+
+    /**
+     *
+     * @return string 
+     */
+    public function getCribisReference()
+    {
+        return $this->cribisReference;
+    }
+
+    /**
+     *
+     * @param string $cribisReference 
+     */
+    public function setCribisReference($cribisReference)
+    {
+        $this->cribisReference = $cribisReference;
+    }    
 
     /**
      *
@@ -400,6 +472,13 @@ class CompanyReports extends Company
             // login & password
             $this->setLogin($webservice['login']);
             $this->setPassword($webservice['password']);
+
+            // For cribis
+            if (basename(str_replace('\\', '/', $this->getWebserviceClassName())) == 'Cribis') {
+                $this->setCribisApplicationId($webservice['application_id']);
+                $this->setCribisReference($webservice['reference']);
+                $this->setCribisProductCode($webservice['product_code']);
+            }
         }
 
         // Initialize cache file
