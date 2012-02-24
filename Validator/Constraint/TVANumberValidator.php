@@ -16,6 +16,10 @@ class TVANumberValidator extends ConstraintValidator
 
     public function isValid($tvaNumber, Constraint $constraint)
     {
+        if (null === $tvaNumber || '' === $tvaNumber) {
+            return true;
+        }        
+
         if (!preg_match('/' . $constraint->patterns[$this->request->getLocale()] . '/i', $tvaNumber)) {
             $this->setMessage($constraint->message);
 
