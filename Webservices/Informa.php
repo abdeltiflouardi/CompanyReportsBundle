@@ -8,11 +8,12 @@ namespace OS\CompanyReportsBundle\Webservices;
  * @author abdou
  */
 use SoapClient,
+    SoapVar,
     DOMDocument,
     SimpleXMLElement,
     OS\CompanyReportsBundle\CompanyReports;
 
-class Europa implements \Serializable
+class Informa implements \Serializable
 {
 
     /**
@@ -20,7 +21,7 @@ class Europa implements \Serializable
      * 
      * @var string $urlWSDL
      */
-    private $urlWSDL = "http://ec.europa.eu/taxation_customs/vies/services/checkVatService?wsdl";
+    private $urlWSDL = 'https://services.informa.es:9444/esb/soap/gps?wsdl';
 
     /**
      * Result of current search result
@@ -46,10 +47,9 @@ class Europa implements \Serializable
     }
 
     /**
-     *
-     * @param string $options 
+     * 
      */
-    public function checkVatApprox()
+    public function getProduct()
     {
         $this->callWS();
     }
@@ -64,7 +64,7 @@ class Europa implements \Serializable
             $this->getCachedCompanyInfos();
         } else {
             if (empty($options)) {
-                $options[] = 'checkVatApprox';
+                $options[] = 'getProduct';
             }
 
             foreach ($options as $option) {
@@ -87,7 +87,7 @@ class Europa implements \Serializable
         $client = new SoapClient($this->getUrlWSDL());
 
         try {
-        $this->result = $client->__SoapCall('checkVatApprox', array($this->getData()));
+            $this->result = $client->__SoapCall('getProduct', array($this->getData()));
         } catch (SoapFault $sf) {
             
         }
@@ -112,42 +112,77 @@ class Europa implements \Serializable
      */
     public function getData()
     {
-        return array(
-            'countryCode'          => $this->companyReports->getCountryCode(),
-            'vatNumber'            => sprintf('%s%s', $this->companyReports->getInfoCode(), $this->companyReports->getSiren()),
-            'requesterCountryCode' => '',
-            'requesterVatNumber'   => '',
-        );
+        $params = new SoapVar(
+                        sprintf('<getProduct>
+                <userId>%s</userId>
+                <password>%s</password>
+                <productCode>ETIQUETA_EMPRESA</productCode>
+                <productVersion>1.2</productVersion>
+                <parameters>
+                    <parameter name="CIF">%s</parameter>
+                    <parameter name="FORMATO_PGC">1</parameter>
+                    <parameter name="NORMALIZADO">1</parameter>
+                    <parameter name="IDIOMA">03</parameter>
+                </parameters>
+            </getProduct>', $this->companyReports->getLogin(), $this->companyReports->getPassword(), substr($this->companyReports->getTva(), 2)), XSD_ANYXML);
+
+        return $params;
     }
 
     /**
      *
-     * @return OS\CompanyReportsBundle\Webservices\Europa
+     * @return OS\CompanyReportsBundle\Webservices\Informa
      */
     public function bindData()
     {
-        if (!$this->result->valid) {
+        if (!$this->result) {
             return $this;
         }
 
-        if ($this->companyReports->getLocale() == 'FR') {
-            $name = explode(' ', $this->result->traderName, 2);
-        } else {
-            $name = array('', $this->result->traderName);
+        if ($this->result->errorCode != 0) {
+            return $this;
         }
 
-        $traderAddress = array();
-        if (property_exists($this->result, 'traderAddress')) {
-            $traderAddress = preg_split ('/$\R?^/m', $this->result->traderAddress);
+        $etiquetaEmpresa = $this->result->product->etiquetaEmpresa;
+
+        // Select report name
+        $identity   = $etiquetaEmpresa->identificacionLocalizacion->identificacion;
+        $item       = $identity->tipoDenominaciones->tipodenominacion;
+        $item       = is_array($item) ? $item[0] : $item;
+        $reportName = $item->valor;
+
+        $this->companyReports->setReportName($reportName);
+
+        // Select Company address
+        $direccion = $identity->tipoDirecciones->direccion;
+        $direccion = is_array($direccion) ? $direccion[0] : $direccion;
+        $address   = $direccion->valor;
+
+        $numeroCalle = '';
+        if ($this->isVarNameExists($direccion, 'numeroCalle')) {
+            $numeroCalle = ', ' . $direccion->numeroCalle;
         }
 
-        $address = count($traderAddress) > 2 ? sprintf('%s %s', $traderAddress[0], $traderAddress[1]) : current($traderAddress);
-        $additionalAddress = end($traderAddress);
+        $this->companyReports->setAddress(sprintf('%s%s', $address, $numeroCalle));
 
-        $this->companyReports->setReportName($name[1]);
-        $this->companyReports->setLegalStatus($name[0]);
-        $this->companyReports->setAddress($address);
-        $this->companyReports->setAdditionToAddress($additionalAddress);
+        $zipcode = $direccion->codigoPostal;
+        $city    = $direccion->municipio;
+        $this->companyReports->setAdditionToAddress(sprintf('%s %s', $zipcode, $city));
+
+        // select company phone
+        if ($this->isVarNameExists($identity, 'tipoContactos')) {
+            $contacto = $identity->tipoContactos->contacto;
+            $phone    = is_array($contacto) ? $contacto[0] : $contacto;
+            $phone    = $phone->valor;
+
+            $this->companyReports->setPhone($phone);
+
+            // select company fax
+            $fax    = is_array($contacto) ? $contacto[1] : '';
+            $fax    = $fax ? $fax->valor : ''; 
+
+            $this->companyReports->setFax($fax);
+        }
 
         return $this;
     }
@@ -212,6 +247,11 @@ class Europa implements \Serializable
     public function isCachedCompanyInfos()
     {
         return file_exists($this->companyReports->getCacheFile());
+    }
+
+    public function isVarNameExists($object, $varname)
+    {
+        return array_key_exists($varname, get_object_vars($object));
     }
 
 }

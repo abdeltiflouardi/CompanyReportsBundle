@@ -344,8 +344,8 @@ class CompanyReports extends Company
     public function getCacheFile()
     {
         if (!$this->cacheFile) {
-            if ($this->getSiren()) {
-                $filename = $this->getSiren();
+            if ($this->getTva()) {
+                $filename = $this->getTva();
             } elseif ($this->getCriteria()) {
                 $filename = $this->getCriteria();
             }
@@ -432,8 +432,9 @@ class CompanyReports extends Company
     {
         $class = $this->getWebserviceClassName();
 
-        if (!$class)
+        if (!class_exists($class)) {
             throw new NotFoundHttpException(sprintf('No webservice was found for this country "%s"', $this->getCountryCode()));
+        }
 
         return new $class($this);
     }

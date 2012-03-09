@@ -1833,10 +1833,14 @@ class Company
      */
     public function tvaToSiren()
     {
-        if (preg_match('/([A-Z]{2})([0-9]{2})([0-9]{9})/i', $this->getTva(), $matches)) {
+        if (preg_match('/^([A-Z]{2})([0-9]{2})([0-9]{9})$/i', $this->getTva(), $matches)) {
             $this->setCountryCode($matches[1]);
             $this->setInfoCode($matches[2]);
             $this->setSiren($matches[3]);
+        } elseif (preg_match('/^(ES)([\w\d]{1}[0-9]{7})([\w\d]{1})$/i', $this->getTva(), $matches)) {
+            $this->setCountryCode($matches[1]);
+            $this->setInfoCode($matches[3]);
+            $this->setSiren($matches[2]);            
         }
 
         return $this;
