@@ -51,7 +51,15 @@ class Informa implements \Serializable
      */
     public function getProduct()
     {
-        $this->callWS();
+        $this->callWS('getProduct');
+    }
+
+    /**
+     * 
+     */
+    public function getTables()
+    {
+        $this->callWS('getTables');
     }
 
     /**
@@ -82,12 +90,12 @@ class Informa implements \Serializable
     /**
      * 
      */
-    public function callWS()
+    public function callWS($func = 'getProduct')
     {
         $client = new SoapClient($this->getUrlWSDL());
 
         try {
-            $this->result = $client->__SoapCall('getProduct', array($this->getData()));
+            $this->result = $client->__SoapCall($func, array($this->getData($func)));
         } catch (SoapFault $sf) {
             
         }
@@ -110,9 +118,10 @@ class Informa implements \Serializable
      *
      * @return type 
      */
-    public function getData()
+    public function getData($func = 'getProduct')
     {
-        $params = new SoapVar(
+        // For product request
+        $getProduct = new SoapVar(
                         sprintf('<getProduct>
                 <userId>%s</userId>
                 <password>%s</password>
@@ -122,11 +131,20 @@ class Informa implements \Serializable
                     <parameter name="CIF">%s</parameter>
                     <parameter name="FORMATO_PGC">1</parameter>
                     <parameter name="NORMALIZADO">1</parameter>
-                    <parameter name="IDIOMA">03</parameter>
+                    <parameter name="IDIOMA">01</parameter>
+                    <parameter name="LITERALES">1</parameter>
                 </parameters>
             </getProduct>', $this->companyReports->getLogin(), $this->companyReports->getPassword(), substr($this->companyReports->getTva(), 2)), XSD_ANYXML);
 
-        return $params;
+        // For getTables request
+        $getTables = new SoapVar(
+                        sprintf('<getTables>
+                <userId>%s</userId>
+                <password>%s</password>
+                <languageCode>01</languageCode>
+            </getTables>', $this->companyReports->getLogin(), $this->companyReports->getPassword()), XSD_ANYXML);
+
+        return $$func;
     }
 
     /**
@@ -139,7 +157,8 @@ class Informa implements \Serializable
             return $this;
         }
 
-        if ($this->result->errorCode != 0) {
+        $rc = new \ReflectionObject($this->result);
+        if (!$rc->hasProperty('errorCode') || $this->result->errorCode != 0) {
             return $this;
         }
 
@@ -159,7 +178,8 @@ class Informa implements \Serializable
         $address   = $direccion->valor;
 
         $numeroCalle = '';
-        if ($this->isVarNameExists($direccion, 'numeroCalle')) {
+        $rc          = new \ReflectionObject($direccion);
+        if ($rc->hasProperty('numeroCalle')) {
             $numeroCalle = ', ' . $direccion->numeroCalle;
         }
 
@@ -170,7 +190,8 @@ class Informa implements \Serializable
         $this->companyReports->setAdditionToAddress(sprintf('%s %s', $zipcode, $city));
 
         // select company phone
-        if ($this->isVarNameExists($identity, 'tipoContactos')) {
+        $rc = new \ReflectionObject($identity);
+        if ($rc->hasProperty('tipoContactos')) {
             $contacto = $identity->tipoContactos->contacto;
             $phone    = is_array($contacto) ? $contacto[0] : $contacto;
             $phone    = $phone->valor;
@@ -178,11 +199,16 @@ class Informa implements \Serializable
             $this->companyReports->setPhone($phone);
 
             // select company fax
-            $fax    = is_array($contacto) ? $contacto[1] : '';
-            $fax    = $fax ? $fax->valor : ''; 
+            $fax = is_array($contacto) ? $contacto[1] : '';
+            $fax = $fax ? $fax->valor : '';
 
             $this->companyReports->setFax($fax);
         }
+
+        // select company forma legal
+        $fl = $etiquetaEmpresa->identificacionLocalizacion->caracteristicas->formaLegal;
+
+        $this->companyReports->setLegalStatus($this->getFormaLegal($fl, $reportName));
 
         return $this;
     }
@@ -249,9 +275,48 @@ class Informa implements \Serializable
         return file_exists($this->companyReports->getCacheFile());
     }
 
-    public function isVarNameExists($object, $varname)
+    public function getFormaLegal($formaLegalCode, $company)
     {
-        return array_key_exists($varname, get_object_vars($object));
+        $list = array(
+            'A' => 'SOCIEDAD ANONIMA',
+            'B' => 'SOCIEDAD LIMITADA',
+            'C' => 'SOCIEDAD REGULAR COLECTIVA',
+            'D' => 'SOCIEDAD COMANDITARIA',
+            'E' => 'COMUNIDAD DE BIENES',
+            'F' => 'COOPERATIVA',
+            'G' => 'ASOCIACION',
+            'H' => 'COMUNIDAD DE PROPIETARIOS',
+            'J' => 'SOCIEDAD CIVIL',
+            'K' => 'AUTONOMO MENOR DE EDAD',
+            'L' => 'AUTONOMO RESIDENCIA EN EL EXTRANJERO',
+            'N' => 'ENTIDADES EXTRANJERAS',
+            'P' => 'CORPORACION LOCAL',
+            'Q' => 'ORGANISMO PÚBLICO',
+            'R' => 'CONGREGACIONES E INSTITUCIONES RELIGIOSAS',
+            'S' => 'ORGANISMO DE LA ADMINISTRACION DEL ESTADO Y CCAA',
+            'T' => 'AUTONOMO EXTRANJERO',
+            'TR' => 'AUTONOMO EXTRANJERO',
+            'U' => 'UNIONES TEMPORALES DE EMPRESAS',
+            'V' => 'OTROS TIPOS NO DEFINIDOS',
+            'W' => 'ESTABLECIMIENTO PERMANENTE DE ENTIDAD NO RESIDENTE',
+            'X' => 'AUTONOMO EXTRANJERO',
+            '0' => 'EMPRESARIO INDIVIDUAL',
+            '1' => 'EMPRESARIO INDIVIDUAL',
+            '2' => 'EMPRESARIO INDIVIDUAL',
+            '3' => 'EMPRESARIO INDIVIDUAL',
+            '4' => 'EMPRESARIO INDIVIDUAL',
+            '5' => 'EMPRESARIO INDIVIDUAL',
+            '6' => 'EMPRESARIO INDIVIDUAL',
+            '7' => 'EMPRESARIO INDIVIDUAL',
+            '8' => 'EMPRESARIO INDIVIDUAL',
+            '9' => 'EMPRESARIO INDIVIDUAL'
+        );
+
+        if (array_key_exists($formaLegalCode, $list)) {
+            return $list[$formaLegalCode];
+        }
+
+        return null;
     }
 
 }
