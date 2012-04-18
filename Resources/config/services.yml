@@ -11,5 +11,4 @@ services:
         class: %validator.tva.number.class%
         tags:
           - { name: validator.constraint_validator, alias: validator.tva.number }
-        arguments: ["@request"]
-        scope: request
+        arguments: []
