@@ -7,12 +7,6 @@ use Symfony\Component\Validator\ConstraintValidator;
 
 class TVANumberValidator extends ConstraintValidator
 {
-    private $request;
-
-    public function __construct($request)
-    {
-        $this->request = $request;
-    }
 
     public function isValid($tvaNumber, Constraint $constraint)
     {
@@ -20,7 +14,9 @@ class TVANumberValidator extends ConstraintValidator
             return true;
         }        
 
-        if (!preg_match('/' . $constraint->patterns[$this->request->getLocale()] . '/i', $tvaNumber)) {
+        $code = substr($tvaNumber, 0, 2);
+
+        if (!in_array($code, $constraint->patterns) || !preg_match('/' . $constraint->patterns[$code] . '/i', $tvaNumber)) {
             $this->setMessage($constraint->message);
 
             return false;
