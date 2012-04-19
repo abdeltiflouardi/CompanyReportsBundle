@@ -14,9 +14,9 @@ class TVANumberValidator extends ConstraintValidator
             return true;
         }        
 
-        $code = substr($tvaNumber, 0, 2);
+        $code = strtolower(substr($tvaNumber, 0, 2));
 
-        if (!in_array($code, $constraint->patterns) || !preg_match('/' . $constraint->patterns[$code] . '/i', $tvaNumber)) {
+        if (!array_key_exists($code, $constraint->patterns) || !preg_match('/' . $constraint->patterns[$code] . '/i', $tvaNumber)) {
             $this->setMessage($constraint->message);
 
             return false;
