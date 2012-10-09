@@ -1837,9 +1837,9 @@ class Company
             $this->setCountryCode($matches[1]);
             $this->setInfoCode($matches[2]);
             $this->setSiren($matches[3]);
-        } elseif (preg_match('/^(ES)([\w\d]{1}[0-9]{7})([\w\d]{1})$/i', $this->getTva(), $matches)) {
+        } elseif (preg_match('/^(ES)([\w\d]{1}[0-9]{7}[\w\d]{1})$/i', $this->getTva(), $matches)) {
             $this->setCountryCode($matches[1]);
-            $this->setInfoCode($matches[3]);
+            $this->setInfoCode(null);
             $this->setSiren($matches[2]);            
         }
 
