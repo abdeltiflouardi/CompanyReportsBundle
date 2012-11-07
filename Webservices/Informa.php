@@ -21,7 +21,7 @@ class Informa implements \Serializable
      * 
      * @var string $urlWSDL
      */
-    private $urlWSDL = 'https://services.informa.es:9444/esb/soap/gps?wsdl';
+    private $urlWSDL = 'https://services.informa.es:8243/soap/gps?wsdl';
 
     /**
      * Result of current search result
