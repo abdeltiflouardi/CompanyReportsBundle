@@ -7,10 +7,7 @@ namespace OS\CompanyReportsBundle\Webservices;
  *
  * @author abdou
  */
-use SoapClient,
-    DOMDocument,
-    SimpleXMLElement,
-    OS\CompanyReportsBundle\CompanyReports;
+use OS\CompanyReportsBundle\CompanyReports;
 
 class Cribis implements \Serializable
 {
@@ -84,7 +81,7 @@ class Cribis implements \Serializable
      */
     public function callWS()
     {
-        $client = new SoapClient($this->getUrlWSDL());
+        $client = new \SoapClient($this->getUrlWSDL());
 
         $result = $client->__SoapCall('getProductByXML', $this->getData());
 
@@ -139,7 +136,7 @@ class Cribis implements \Serializable
         $parameterNameValue = 'fiscalcode';
         $parameterValueValue = sprintf('%s%s', $this->companyReports->getInfoCode(), $this->companyReports->getSiren());        
 
-        $xml = new DOMDocument('1.0', 'utf-8');
+        $xml = new \DOMDocument('1.0', 'utf-8');
 
         // Create root node <PARAMETERS>
         $parameters     = $xml->createElement('PARAMETERS');

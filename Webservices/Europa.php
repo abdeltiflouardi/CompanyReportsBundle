@@ -7,10 +7,7 @@ namespace OS\CompanyReportsBundle\Webservices;
  *
  * @author abdou
  */
-use SoapClient,
-    DOMDocument,
-    SimpleXMLElement,
-    OS\CompanyReportsBundle\CompanyReports;
+use OS\CompanyReportsBundle\CompanyReports;
 
 class Europa implements \Serializable
 {
@@ -84,11 +81,11 @@ class Europa implements \Serializable
      */
     public function callWS()
     {
-        $client = new SoapClient($this->getUrlWSDL());
+        $client = new \SoapClient($this->getUrlWSDL());
 
         try {
-        $this->result = $client->__SoapCall('checkVatApprox', array($this->getData()));
-        } catch (SoapFault $sf) {
+            $this->result = $client->__SoapCall('checkVatApprox', array($this->getData()));
+        } catch (\SoapFault $sf) {
             
         }
 

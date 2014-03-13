@@ -7,10 +7,7 @@ namespace OS\CompanyReportsBundle\Webservices;
  *
  * @author abdou
  */
-use SoapClient,
-    DOMDocument,
-    SimpleXMLElement,
-    OS\CompanyReportsBundle\CompanyReports;
+use OS\CompanyReportsBundle\CompanyReports;
 
 class CreditSafe implements \Serializable
 {
@@ -122,7 +119,7 @@ class CreditSafe implements \Serializable
      */
     public function callWS()
     {
-        $client = new SoapClient($this->getUrlWSDL());
+        $client = new \SoapClient($this->getUrlWSDL());
 
         $result = $client->__SoapCall('GetData', array($this->getData()));
 
@@ -179,7 +176,7 @@ class CreditSafe implements \Serializable
     {
         $xml = $this->getDefaultXMLSchema();
 
-        $domXML = new DOMDocument();
+        $domXML = new \DOMDocument();
         $domXML->loadXML($xml);
 
         $domXML->getElementsByTagName('operation')->item(0)->appendChild($domXML->createTextNode('directorsearch'));
@@ -211,7 +208,7 @@ class CreditSafe implements \Serializable
     {
         $xml = $this->getDefaultXMLSchema();
 
-        $domXML = new DOMDocument();
+        $domXML = new \DOMDocument();
         $domXML->loadXML($xml);
 
         $domXML->getElementsByTagName('operation')->item(0)->appendChild($domXML->createTextNode('companysearch'));
@@ -228,7 +225,7 @@ class CreditSafe implements \Serializable
     {
         $xml = $this->getDefaultXMLSchema();
 
-        $domXML = new DOMDocument();
+        $domXML = new \DOMDocument();
         $domXML->loadXML($xml);
 
         $domXML->getElementsByTagName('operation')->item(0)->appendChild($domXML->createTextNode('getcompanyinformation'));
@@ -243,7 +240,7 @@ class CreditSafe implements \Serializable
      */
     public function getDefaultXMLSchema()
     {
-        $domXML         = new DOMDocument();
+        $domXML         = new \DOMDocument();
         $elemXMLRequest = $domXML->createElement('xmlrequest');
 
         $elemHeader = $domXML->createElement('header');
@@ -290,7 +287,7 @@ class CreditSafe implements \Serializable
         if ($returnString)
             return $this->XMLResult;
 
-        $domXML = new DOMDocument();
+        $domXML = new \DOMDocument();
         $domXML->loadXML($this->XMLResult);
 
         return $domXML;
@@ -398,7 +395,7 @@ class CreditSafe implements \Serializable
 
         // Bilan actif/passif/results
         $balanceSheets = array();
-        $sx = new SimpleXMLElement($domXML->saveXML());
+        $sx = new \SimpleXMLElement($domXML->saveXML());
 
         // Balancesheet
         if ($sx->body->company->balancesynthesis)

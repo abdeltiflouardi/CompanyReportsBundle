@@ -7,11 +7,7 @@ namespace OS\CompanyReportsBundle\Webservices;
  *
  * @author abdou
  */
-use SoapClient,
-    SoapVar,
-    DOMDocument,
-    SimpleXMLElement,
-    OS\CompanyReportsBundle\CompanyReports;
+use OS\CompanyReportsBundle\CompanyReports;
 
 class Informa implements \Serializable
 {
@@ -92,11 +88,11 @@ class Informa implements \Serializable
      */
     public function callWS($func = 'getProduct')
     {
-        $client = new SoapClient($this->getUrlWSDL());
+        $client = new \SoapClient($this->getUrlWSDL());
 
         try {
             $this->result = $client->__SoapCall($func, array($this->getData($func)));
-        } catch (SoapFault $sf) {
+        } catch (\SoapFault $sf) {
             
         }
 
@@ -121,7 +117,7 @@ class Informa implements \Serializable
     public function getData($func = 'getProduct')
     {
         // For product request
-        $getProduct = new SoapVar(
+        $getProduct = new \SoapVar(
                         sprintf('<getProduct>
                 <userId>%s</userId>
                 <password>%s</password>
@@ -137,14 +133,18 @@ class Informa implements \Serializable
             </getProduct>', $this->companyReports->getLogin(), $this->companyReports->getPassword(), substr($this->companyReports->getTva(), 2)), XSD_ANYXML);
 
         // For getTables request
-        $getTables = new SoapVar(
+        $getTables = new \SoapVar(
                         sprintf('<getTables>
                 <userId>%s</userId>
                 <password>%s</password>
                 <languageCode>01</languageCode>
             </getTables>', $this->companyReports->getLogin(), $this->companyReports->getPassword()), XSD_ANYXML);
 
-        return $$func;
+        if ($func == 'getProduct') {
+            return $getProduct;
+        }
+
+        return $getTables;
     }
 
     /**
