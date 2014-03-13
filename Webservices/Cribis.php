@@ -173,7 +173,7 @@ class Cribis implements \Serializable
             $res = str_replace(array('<msg>', '</msg>'), array('<msg><![CDATA[', ']]></msg>'), $res);
         }
 
-        $dom = new DOMDocument();
+        $dom = new \DOMDocument();
         $dom->preserveWhiteSpace = false;
         $dom->loadXML($res);
         $dom->formatOutput = true;
