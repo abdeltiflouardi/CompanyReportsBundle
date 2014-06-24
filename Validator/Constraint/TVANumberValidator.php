@@ -8,7 +8,7 @@ use Symfony\Component\Validator\ConstraintValidator;
 class TVANumberValidator extends ConstraintValidator
 {
 
-    public function isValid($tvaNumber, Constraint $constraint)
+    public function validate($tvaNumber, Constraint $constraint)
     {
         if (null === $tvaNumber || '' === $tvaNumber) {
             return true;
