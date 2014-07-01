@@ -17,7 +17,7 @@ class TVANumberValidator extends ConstraintValidator
         $code = strtolower(substr($tvaNumber, 0, 2));
 
         if (!array_key_exists($code, $constraint->patterns) || !preg_match('/' . $constraint->patterns[$code] . '/i', $tvaNumber)) {
-            $this->setMessage($constraint->message);
+            $this->context->addViolation($constraint->message);
 
             return false;
         }
