@@ -15,6 +15,7 @@ class TVANumber extends Constraint
         'fr' => '^FR[A-Za-z0-9]{2}[0-9]{9}$',
         'es' => '^ES[\w\d]{1}[0-9]{7}[\w\d]{1}$',
         'it' => '^IT[0-9]{11}$',
+        'de' => '^DE[0-9]{9}$',
     );
 
     public function validatedBy()
