@@ -10,9 +10,14 @@ class TVANumberValidator extends ConstraintValidator
 
     public function validate($tvaNumber, Constraint $constraint)
     {
+        return $this->isValid($tvaNumber, $constraint);
+    }
+
+    public function isValid($tvaNumber, Constraint $constraint)
+    {
         if (null === $tvaNumber || '' === $tvaNumber) {
             return true;
-        }        
+        }
 
         $code = strtolower(substr($tvaNumber, 0, 2));
 
